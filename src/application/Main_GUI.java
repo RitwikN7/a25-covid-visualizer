@@ -1,6 +1,7 @@
 package application;
 
 import java.time.LocalDate;
+
 import java.util.*;
 
 // Unnecessary imports because this is not the final version of the application yet. 
@@ -41,13 +42,7 @@ import javafx.stage.Stage;
 
 public class Main_GUI extends Application {
 	
-	
-	
-	
-	
-	
 	private List<String> args;
-
 	private static final int WINDOW_WIDTH = 900;
 	private static final int WINDOW_HEIGHT = 700;
 	private static final String APP_TITLE = "ateam 25 project Milestone 2";
@@ -199,11 +194,7 @@ public class Main_GUI extends Application {
 	
 	// For the final submission this data would be parsed from a JSON file/API 
 	// and directly fed into the graph for respective countries and dates
-	
 	private LineChart drawGraph() {
-		
-		
-		
 		ObservableList<String> ob = FXCollections.observableArrayList();
 		
 		CategoryAxis xAxis = new CategoryAxis();
@@ -214,15 +205,12 @@ public class Main_GUI extends Application {
 		
 		LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
 		lc.setTitle("USA Cases [Sample data]");
-		
 	
 		XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
 		XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
 		XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
-
 		
 		// Confirmed cases
-		
 		dataConfirmed.getData().add(new XYChart.Data<String,Number>("03/01/2020",74));
 		dataConfirmed.getData().add(new XYChart.Data<String,Number>("03/02/2020",98));
 		dataConfirmed.getData().add(new XYChart.Data<String,Number>("03/03/2020",118));
@@ -235,7 +223,6 @@ public class Main_GUI extends Application {
 		dataConfirmed.getData().add(new XYChart.Data<String,Number>("03/10/2020",959));
 		
 		// Deaths
-		
 		dataDeaths.getData().add(new XYChart.Data<String,Number>("03/01/2020",1));
 		dataDeaths.getData().add(new XYChart.Data<String,Number>("03/02/2020",6));
 		dataDeaths.getData().add(new XYChart.Data<String,Number>("03/03/2020",7));
@@ -248,7 +235,6 @@ public class Main_GUI extends Application {
 		dataDeaths.getData().add(new XYChart.Data<String,Number>("03/10/2020",28));
 		
 		// Recovered
-		
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/01/2020",7));
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/02/2020",7));
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/03/2020",7));
@@ -259,13 +245,10 @@ public class Main_GUI extends Application {
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/08/2020",7));
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/09/2020",7));
 		dataRecovered.getData().add(new XYChart.Data<String,Number>("03/10/2020",8));
-
-		
 		
 		dataConfirmed.setName("Confirmed");
 		dataDeaths.setName("Deaths");
 		dataRecovered.setName("Recovered");
-
 		
 		lc.getData().add(dataConfirmed);
 		lc.getData().add(dataDeaths);
@@ -274,8 +257,13 @@ public class Main_GUI extends Application {
 		return lc;
 	}
 	
-	
-	
-	}
+	/**
+	   * Main method that just calls launch and passes the args
+	   * @param args
+	   */
+	  public static void main(String[] args) {
+	    launch(args);
+	  }
+}
 	
 	
