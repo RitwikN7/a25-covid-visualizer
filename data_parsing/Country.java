@@ -32,6 +32,7 @@ package data_parsing;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import org.json.simple.JSONArray;
 import java.util.Map.Entry;;
 
 /**
@@ -53,7 +54,7 @@ public class Country {
 	 * @param name the name of this Country
 	 * @throws IllegalArgumentException if name is null or zero length.
 	 */
-	public Country(String name) {
+	public Country(String name, JSONArray data) {
 		if (name == null)
 			throw new IllegalArgumentException("name parameter is null");
 		if (name.length() == 0)
@@ -61,6 +62,8 @@ public class Country {
 
 		this.name = name;
 		this.dataEntries = new HashMap<Date, DataEntry>();
+		
+		
 	}
 
 	/**
