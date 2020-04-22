@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: halverson
+Class-Path: "/Users/drewhalverson/OneDrive - UW-Madison/Github/a25-covid-visualizer/javafx-sdk-11.0.2/lib"
+Main-Class: application.Main_GUI
