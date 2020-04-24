@@ -31,6 +31,7 @@ package data_parsing;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import java.util.Map.Entry;;
@@ -105,5 +106,51 @@ public class Country {
 	 */
 	public Set<Entry<Date, DataEntry>> getAllEntries() {
 		return this.dataEntries.entrySet();
+	}
+	
+	/**
+	 * Returns the total number of deaths for a country
+	 * @return int
+	 */
+	protected int getTotalNumDeaths() {
+		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		int total = 0;
+		
+		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+			total += toGetDataFrom.getValue().getDeaths();
+		}
+		return total;
+		
+	}
+	
+	
+	/**
+	 * Returns the total number of recovered cases for a country
+	 * @return
+	 */
+	protected int getTotalNumRecovered() {
+		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		int total = 0;
+		
+		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+			total += toGetDataFrom.getValue().getRecovered();
+		}
+		return total;
+		
+	}
+	
+	
+	/**
+	 * Returns the total number of active cases for a country
+	 * @return
+	 */
+	protected int getTotalNumActive() {
+		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		int total = 0;
+		
+		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+			total += toGetDataFrom.getValue().getActive();
+		}
+		return total;
 	}
 }

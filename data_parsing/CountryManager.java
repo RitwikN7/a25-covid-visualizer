@@ -7,6 +7,7 @@ package data_parsing;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,4 +50,148 @@ public class CountryManager {
     
     return countryMap;
   }
+  /**
+   * Returns a country object 
+   * @param countryName
+   * @return
+   * @throws CountryNotFoundException
+   */
+  
+  public Country getCountry(String countryName) throws CountryNotFoundException{
+	  
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	  else {
+		  return countries.get(countryName);
+	  }
+  }
+  
+  //****QUESTION: SHOULD WE CONVERT TO LOCALDATE OBJECT****
+  
+  /**
+   * Returns number of deaths for a country on a certain date  
+   * @param countryName
+   * @return
+   * @throws CountryNotFoundException
+   */
+  
+  public int getNumDeathsForCountryOnCertainDate(String countryName, LocalDate date) throws CountryNotFoundException{
+	  
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	  else {
+		  return countries.get(countryName).getEntry(date).getDeaths();
+	  }
+  }
+  
+  /**
+   * Returns number of active cases for a country on a certain date  
+   * @param countryName, LocalDate date
+   * @return
+   * @throws CountryNotFoundException
+   */
+  
+  public int getNumActiveForCountryOnCertainDate(String countryName, LocalDate date) throws CountryNotFoundException{
+	  
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	  else {
+		  return countries.get(countryName).getEntry(date).getActive();
+	  }
+  }
+  
+  /**
+   * Returns number of active cases for a country on a certain date  
+   * @param countryName, LocalDate date
+   * @return
+   * @throws CountryNotFoundException
+   */
+  
+  public int getNumRecoveredForCountryOnCertainDate(String countryName, LocalDate date) throws CountryNotFoundException{
+	  
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	  else {
+		  return countries.get(countryName).getEntry(date).getRecovered();
+	  }
+  }
+  
+
+  
+  /**
+   * Gets the total number of deaths for a country 
+   * @param countryName
+   * @return
+   * @throws CountryNotFoundException
+   */
+  public int getTotalNumDeaths(String countryName) throws CountryNotFoundException{
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	 return countries.get(countryName).getTotalNumDeaths();
+  }
+  
+  /**
+   * Gets the total number of recovered cases for a country 
+   * @param countryName
+   * @return
+   * @throws CountryNotFoundException
+   */
+  public int getTotalNumRecovered(String countryName) throws CountryNotFoundException{
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	 return countries.get(countryName).getTotalNumRecovered();
+  }
+  
+  /**
+   * Gets the total number of active cases for a country 
+   * @param countryName
+   * @return
+   * @throws CountryNotFoundException
+   */
+  public int getTotalNumActive(String countryName) throws CountryNotFoundException{
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	 return countries.get(countryName).getTotalNumActive();
+  }
+  
+  /**
+   * Returns a string containing all pertinent information for a country
+   * 
+   * @param countryName, LocalDate date
+   * @return
+   * @throws CountryNotFoundException
+   */
+  
+  public String toString(String countryName, LocalDate date) throws CountryNotFoundException{
+	  
+	  if(!countries.containsKey(countryName)) {
+		  throw new CountryNotFoundException();
+	  }
+	  else {
+		  String toReturn = "";
+		  //get date
+		  toReturn += countries.get(countryName).getEntry(date).toString() + ": ";
+		  
+		  //add number of deaths
+		  toReturn += "Total number of deaths: " + this.getTotalNumDeaths(countryName) + "\n";
+		  
+		  //add number of active cases: 
+		  toReturn += "Total Number of active cases: " + this.getTotalNumActive(countryName) + "\n";
+
+		  //add number of recovered cases
+		  
+		  toReturn += "Total Number of recoveries: " + this.getTotalNumRecovered(countryName) + "\n";
+
+	  }
+  }
+
+  
+  
 }
