@@ -112,6 +112,14 @@ public class CountryManager {
     
     return countryMap;
   }
+  
+  /**
+   * Getter for size
+   * @return number of countries in our hash map.
+   */
+  public int getSize() {
+    return size;
+  }
 
   /**
    * Returns a country object
