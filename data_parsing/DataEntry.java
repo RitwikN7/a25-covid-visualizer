@@ -1,35 +1,5 @@
-/**
- * DataEntry.java created by drewhalverson on MacBook Pro 15-inch, 2018 in p2_project.
- *
- * This class titled "DataEntry" holds a Date and data recorded from that date about covid19
- * deaths, active cases, and recovered cases.
- *
- * Author:   Drew Halverson (dhalverson2@wisc.edu)
- * Date:     4/20/20
- *
- * Course:   CS400
- * Semester: Spring 2020
- * Lecture:  001
- *
- * IDE:      Eclipse IDE for Java Developers
- * Version:  2019-12 (4.14.0)
- * Build id: 20191212-1212
- *
- * Device:   Drew's MacBook Pro
- * OS:       macOS Catalina
- * Version   10.15.2
- * OS Build: 19C57
- * 
- * List Collaborators: None
- *
- * Other Credits: None
- *
- * Known Bugs: None
- */
-
 package data_parsing;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * DataEntry - holds a Date and data recorded from that date about covid19
@@ -39,7 +9,8 @@ import java.util.Date;
  */
 public class DataEntry {
 
-	private final Date date;
+
+	private final LocalDate date;
 	private int deaths;
 	private int active;
 	private int recovered;
@@ -50,7 +21,7 @@ public class DataEntry {
 	 * 
 	 * @param date Date object of this entry
 	 */
-	public DataEntry(Date date) {
+	public DataEntry(LocalDate date) {
 		this(date, 0, 0, 0);
 	}
 
@@ -64,7 +35,7 @@ public class DataEntry {
 	 * @param recovered the number of recovered cases on this date
 	 * @throws IllegalArgumentException when date is null.
 	 */
-	public DataEntry(Date date, int deaths, int active, int recovered) {
+	public DataEntry(LocalDate date, int deaths, int active, int recovered) {
 		if (date == null)
 			throw new IllegalArgumentException("date is null");
 		this.date = date;
@@ -75,7 +46,7 @@ public class DataEntry {
 	 * 
 	 * @return returns the date of this entry.
 	 */
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	

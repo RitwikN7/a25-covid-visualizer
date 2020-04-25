@@ -29,6 +29,7 @@
 
 package data_parsing;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,7 +45,7 @@ import java.util.Map.Entry;;
  */
 public class Country {
 
-	private HashMap<Date, DataEntry> dataEntries;
+	private HashMap<LocalDate, DataEntry> dataEntries;
 	private String name;
 
 	/**
@@ -55,14 +56,14 @@ public class Country {
 	 * @param name the name of this Country
 	 * @throws IllegalArgumentException if name is null or zero length.
 	 */
-	public Country(String name, JSONArray data) {
+	public Country(String name) {
 		if (name == null)
 			throw new IllegalArgumentException("name parameter is null");
 		if (name.length() == 0)
 			throw new IllegalArgumentException("name parameter is zero length string.");
 
 		this.name = name;
-		this.dataEntries = new HashMap<Date, DataEntry>();
+		this.dataEntries = new HashMap<LocalDate, DataEntry>();
 		
 		
 	}
@@ -74,7 +75,7 @@ public class Country {
 	 * @return returns a DataEntry object that is obtained from the hashmap by
 	 *         searching for key date
 	 */
-	public DataEntry getEntry(Date date) {
+	public DataEntry getEntry(LocalDate date) {
 		return dataEntries.get(date);
 	}
 
@@ -94,7 +95,7 @@ public class Country {
 	 * @param date  the key, a Date object
 	 * @param entry the value, a DataEntry object
 	 */
-	public void addEntry(Date date, DataEntry entry) {
+	public void addEntry(LocalDate date, DataEntry entry) {
 		this.dataEntries.put(date, entry);
 	}
 
@@ -104,7 +105,7 @@ public class Country {
 	 * 
 	 * @return a Set of all Date, DataEntry entries.
 	 */
-	public Set<Entry<Date, DataEntry>> getAllEntries() {
+	public Set<Entry<LocalDate, DataEntry>> getAllEntries() {
 		return this.dataEntries.entrySet();
 	}
 	
@@ -113,10 +114,10 @@ public class Country {
 	 * @return int
 	 */
 	protected int getTotalNumDeaths() {
-		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
 		int total = 0;
 		
-		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getDeaths();
 		}
 		return total;
@@ -129,10 +130,10 @@ public class Country {
 	 * @return
 	 */
 	protected int getTotalNumRecovered() {
-		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
 		int total = 0;
 		
-		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getRecovered();
 		}
 		return total;
@@ -145,10 +146,10 @@ public class Country {
 	 * @return
 	 */
 	protected int getTotalNumActive() {
-		Set<Entry<Date,DataEntry>> allDays = this.getAllEntries();
+		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
 		int total = 0;
 		
-		for(Entry<Date,DataEntry> toGetDataFrom: allDays) {
+		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getActive();
 		}
 		return total;
