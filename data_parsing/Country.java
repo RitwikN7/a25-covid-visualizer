@@ -64,8 +64,6 @@ public class Country {
 
 		this.name = name;
 		this.dataEntries = new HashMap<LocalDate, DataEntry>();
-		
-		
 	}
 
 	/**
@@ -111,7 +109,7 @@ public class Country {
 	
 	/**
 	 * Returns the total number of deaths for a country
-	 * @return int
+	 * @return an int of the total deaths in this Country
 	 */
 	protected int getTotalNumDeaths() {
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
@@ -127,7 +125,7 @@ public class Country {
 	
 	/**
 	 * Returns the total number of recovered cases for a country
-	 * @return
+	 * @return an int of the total number of recovered cases in this country.
 	 */
 	protected int getTotalNumRecovered() {
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
@@ -143,7 +141,7 @@ public class Country {
 	
 	/**
 	 * Returns the total number of active cases for a country
-	 * @return
+	 * @return an int of the total active cases in this country.
 	 */
 	protected int getTotalNumActive() {
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntries();
