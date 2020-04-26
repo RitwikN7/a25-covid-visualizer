@@ -237,6 +237,102 @@ public class CountryManager {
     }
     return countries.get(countryName).getTotalNumActive();
   }
+  
+ 
+  /**
+   * Gets total number of active cases for a country in a certain date range
+   * @param countryName
+   * @param date1
+   * @param date2
+   * @return
+   * @throws CountryNotFoundException
+   */
+public HashMap<LocalDate, Integer> getNumActiveForDateRange(String countryName, LocalDate date1, LocalDate date2) throws CountryNotFoundException {
+	HashMap<LocalDate,Integer> toReturn = new HashMap<LocalDate,Integer>();
+	Country countryToGetStatsFrom = this.getCountry(countryName);
+	
+	for(LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
+		int numActive = this.getNumActiveForCountryOnCertainDate(countryName, start);
+		toReturn.put(start, numActive);
+	}
+	
+	return toReturn;
+
+}
+
+/**
+ * Gets total number of deaths for a country in a certain date range
+ * @param countryName
+ * @param date1
+ * @param date2
+ * @return
+ * @throws CountryNotFoundException
+ */
+public HashMap<LocalDate, Integer> getNumDeathsForDateRange(String countryName, LocalDate date1, LocalDate date2) throws CountryNotFoundException {
+	HashMap<LocalDate,Integer> toReturn = new HashMap<LocalDate,Integer>();
+	Country countryToGetStatsFrom = this.getCountry(countryName);
+	
+	for(LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
+		int numActive = this.getNumDeathsForCountryOnCertainDate(countryName, start);
+		toReturn.put(start, numActive);
+	}
+	
+	return toReturn;
+}
+
+/**
+ * Gets total number of recoveries for a country in a certain date range
+ * @param countryName
+ * @param date1
+ * @param date2
+ * @return
+ * @throws CountryNotFoundException
+ */
+public HashMap<LocalDate, Integer> getNumRecoveredForDateRange(String countryName, LocalDate date1, LocalDate date2) throws CountryNotFoundException {
+	HashMap<LocalDate,Integer> toReturn = new HashMap<LocalDate,Integer>();
+	Country countryToGetStatsFrom = this.getCountry(countryName);
+	
+	for(LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
+		int numActive = this.getNumRecoveredForCountryOnCertainDate(countryName, start);
+		toReturn.put(start, numActive);
+	}
+	
+	return toReturn;
+}
+
+/**
+   * Returns a string containing all pertinent information for a country for a certain date range
+ * @param countryName
+ * @param date1
+ * @param date2
+ * @return
+ * @throws CountryNotFoundException
+ */
+public String toStringForDateRange(String countryName, LocalDate date1, LocalDate date2) throws CountryNotFoundException {
+	
+	   String toReturn = "";
+
+	    if (!countries.containsKey(countryName)) {
+	      throw new CountryNotFoundException();
+	    } else {
+	      // get date
+	      toReturn += "Statistics for " + countries.get(countryName).getEntry(date1).toString() + " until " + countries.get(countryName).getEntry(date2).toString() ;
+
+	      // add number of deaths
+	      toReturn += "Total number of deaths: " + this.getNumDeathsForDateRange(countryName, date1, date2) + "\n";
+
+	      // add number of active cases:
+	      toReturn += "Total Number of active cases: " + this.getNumActiveForDateRange(countryName, date1, date2) + "\n";
+
+	      // add number of recovered cases
+
+	      toReturn += "Total Number of recoveries: " + this.getNumRecoveredForDateRange(countryName, date1, date2) + "\n";
+
+	    }
+	    return toReturn;
+	  }
+
+
 
   /**
    * Returns a string containing all pertinent information for a country
@@ -269,6 +365,7 @@ public class CountryManager {
     return toReturn;
   }
 
+  
 
 
 }
