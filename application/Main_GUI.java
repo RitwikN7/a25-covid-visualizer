@@ -60,8 +60,7 @@ public class Main_GUI extends Application {
   private static final int WINDOW_WIDTH = 940;
   private static final int WINDOW_HEIGHT = 700;
   private CountryManager manager = new CountryManager("timeseries.json");
- private  String countryThatWasPicked;
-
+  private String countryThatWasPicked;
 
   private static final String APP_TITLE = "ateam 25 project Milestone 2";
 
@@ -71,11 +70,8 @@ public class Main_GUI extends Application {
     BorderPane root = new BorderPane();
     Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-
     // FIrst Grid Pane
     GridPane topGP = new GridPane();
-
-
 
     // Menu section
     HBox menuHB = new HBox();
@@ -88,7 +84,37 @@ public class Main_GUI extends Application {
     ComboBox<String> cbMenu = new ComboBox<String>(ob1);
     menuHB.getChildren().add(cbMenu);
     cbMenu.setPromptText("Menu");
+    EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
+      public void handle(ActionEvent e) {
 
+        String optionSelected = cbMenu.getValue();
+
+        if (optionSelected == "About") {
+          Alert alert = new Alert(AlertType.INFORMATION);
+          alert.setTitle("About");
+          alert.setHeaderText("About");
+          String s = "This program is a COVID-19 data visualizer with an emphasis on how "
+              + "the statistics concerning this global pandemic for a particular country "
+              + "have changed over time. Users can use this tool of "
+              + "analysis to know daily change in the number of total confirmed cases, total "
+              + "deaths and total recovered for a particular country affected by "
+              + "COVID-19. Graphical visualisations and tabular data available for the same.\n\n"
+              + "Click on 'Take ScreenShot' to save the screenshot of the data displayed on screen.";
+          alert.setContentText(s);
+          alert.show();
+        } else if (optionSelected == "Sources") {
+
+          Alert alert = new Alert(AlertType.INFORMATION);
+          alert.setTitle("Sources");
+          alert.setHeaderText("Sources");
+          String s = "COVID-19 data Source: https://pomber.github.io/covid19/timeseries.json\n";
+          alert.setContentText(s);
+          alert.show();
+        }
+      }
+    };
+
+    cbMenu.setOnAction(event3);
 
     // main Label
     HBox labelHB = new HBox();
@@ -103,32 +129,30 @@ public class Main_GUI extends Application {
     scn.setText("Take Screenshot");
     scnHB.getChildren().add(scn);
     scn.setOnAction(new EventHandler<ActionEvent>() {
-         
-        @Override
-        public void handle(ActionEvent event) {
-            System.out.println("Hello World!");
-            takeSnapShot(mainScene);
-             
-        }
+
+      @Override
+      public void handle(ActionEvent event) {
+        System.out.println("Hello World!");
+        takeSnapShot(mainScene);
+
+      }
     });
     topGP.add(menuHB, 0, 0);
     topGP.add(labelHB, 1, 0);
     topGP.add(scnHB, 2, 0);
 
-
     // Second Grid Pane
     GridPane secondGP = new GridPane();
-
 
     // Country section
     HBox countryHB = new HBox();
     ArrayList<String> countryMenu = new ArrayList<String>();
-    
-    for(String countryName : manager.getAllCountries().keySet()) {
-    	countryMenu.add(countryName);
+
+    for (String countryName : manager.getAllCountries().keySet()) {
+      countryMenu.add(countryName);
     }
     Collections.sort(countryMenu);
-  
+
     ObservableList<String> ob2 = FXCollections.observableArrayList(countryMenu);
     ComboBox<String> ctMenu = new ComboBox<String>(ob2);
     countryHB.getChildren().add(ctMenu);
@@ -139,12 +163,11 @@ public class Main_GUI extends Application {
 
       public void handle(ActionEvent e) {
 
-
         // get the date picker value
         countryThatWasPicked = ctMenu.getValue();
-        
+
         System.out.println(countryThatWasPicked);
-        
+
         root.setCenter(drawGraph(countryThatWasPicked));
 
       }
@@ -173,12 +196,10 @@ public class Main_GUI extends Application {
 
       public void handle(ActionEvent e) {
 
-
-
         // get the date picker value
         LocalDate startDate = datePicker.getValue();
         LocalDate endDate = datePicker.getValue();
-        
+
         System.out.println("First date picked " + startDate);
         System.out.println("End date picked " + endDate);
 
@@ -197,18 +218,15 @@ public class Main_GUI extends Application {
     statTableVB.getChildren().add(deathsLabel);
     statTableVB.getChildren().add(recoveredLabel);
 
-
     dateHB.getChildren().add(datePicker);
     dateHB.getChildren().add(statTableVB);
 
     datePicker.setPromptText("---Select Date---");
     secondGP.add(dateHB, 1, 0);
 
-
     VBox top = new VBox(topGP, secondGP);
     top.setSpacing(20);
     root.setTop(top);
-
 
     // Part: Adding an Exit button bottom panel
     Button btn = new Button("Close");
@@ -223,21 +241,20 @@ public class Main_GUI extends Application {
     primaryStage.show();
 
   }
-  
+
   // take Snapshot functionality
-  
-  private void takeSnapShot(Scene scene){
-      WritableImage writableImage = 
-          new WritableImage((int)scene.getWidth(), (int)scene.getHeight());
-      scene.snapshot(writableImage);
-       
-      File file = new File("snapshot.png");
-      try {
-          ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
-          System.out.println("snapshot saved: " + file.getAbsolutePath());
-      } catch (IOException ex) {
-          Logger.getLogger(Main_GUI.class.getName()).log(Level.SEVERE, null, ex);
-      }
+
+  private void takeSnapShot(Scene scene) {
+    WritableImage writableImage = new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
+    scene.snapshot(writableImage);
+
+    File file = new File("snapshot.png");
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+      System.out.println("snapshot saved: " + file.getAbsolutePath());
+    } catch (IOException ex) {
+      Logger.getLogger(Main_GUI.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
   // For the final submission this data would be parsed from a JSON file/API
@@ -249,7 +266,7 @@ public class Main_GUI extends Application {
     xAxis.setLabel("Date");
 
     NumberAxis yAxis = new NumberAxis();
-    yAxis.setLabel("Total number of additional cases");
+    yAxis.setLabel("Total number of cases");
 
     LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
     lc.setTitle(countryThatWasPicked + " Cases");
@@ -257,32 +274,75 @@ public class Main_GUI extends Application {
     XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
     XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
     XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
-    
 
     try {
-		Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
-		
-		HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
-		
-		List<LocalDate> dates = countryToGetDataFrom.getAllDates();
-		
-		for(LocalDate inOrderDate : dates) {
-			DataEntry data = returnedCountryData.get(inOrderDate);
-			System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
-			dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
-			dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
-			dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+      Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
-		}
-		
-		
-	} catch (CountryNotFoundException e) {
-		// TODO Auto-generated catch block
-		
-		//TODO ADD BAD DATA ALERT?
-		e.printStackTrace();
-	}
-      
+      HashMap<LocalDate, DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
+
+      List<LocalDate> dates = countryToGetDataFrom.getAllDates();
+
+      for (LocalDate inOrderDate : dates) {
+        DataEntry data = returnedCountryData.get(inOrderDate);
+        System.out.println("Current Date: " + inOrderDate + " & Number of Confirmed Cases " + data.getActive());
+        dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getActive()));
+        dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getDeaths()));
+        dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getRecovered()));
+
+      }
+
+    } catch (CountryNotFoundException e) {
+      // TODO Auto-generated catch block
+
+      // TODO ADD BAD DATA ALERT?
+      e.printStackTrace();
+    }
+
+    // Confirmed cases
+    /*
+     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020",
+     * 74)); dataConfirmed.getData().add(new XYChart.Data<String,
+     * Number>("03/02/2020", 98)); dataConfirmed.getData().add(new
+     * XYChart.Data<String, Number>("03/03/2020", 118));
+     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/04/2020",
+     * 149)); dataConfirmed.getData().add(new XYChart.Data<String,
+     * Number>("03/05/2020", 217)); dataConfirmed.getData().add(new
+     * XYChart.Data<String, Number>("03/06/2020", 262));
+     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/07/2020",
+     * 402)); dataConfirmed.getData().add(new XYChart.Data<String,
+     * Number>("03/08/2020", 518)); dataConfirmed.getData().add(new
+     * XYChart.Data<String, Number>("03/09/2020", 583));
+     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/10/2020",
+     * 959));
+     */
+
+    /*
+     * // Deaths dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/01/2020", 1)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/02/2020", 6)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/03/2020", 7)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/04/2020", 11)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/05/2020", 12)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/06/2020", 14)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/07/2020", 17)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/08/2020", 21)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/09/2020", 22)); dataDeaths.getData().add(new XYChart.Data<String,
+     * Number>("03/10/2020", 28)); // Recovered dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/01/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/02/2020",
+     * 7)); dataRecovered.getData().add(new XYChart.Data<String,
+     * Number>("03/03/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/04/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/05/2020",
+     * 7)); dataRecovered.getData().add(new XYChart.Data<String,
+     * Number>("03/06/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/07/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/08/2020",
+     * 7)); dataRecovered.getData().add(new XYChart.Data<String,
+     * Number>("03/09/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/10/2020", 8));
+     */
+
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
     dataRecovered.setName("Recovered");
@@ -303,4 +363,3 @@ public class Main_GUI extends Application {
     launch(args);
   }
 }
-
