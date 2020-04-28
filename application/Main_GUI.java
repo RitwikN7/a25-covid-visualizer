@@ -102,7 +102,7 @@ public class Main_GUI extends Application {
             			"analysis to know daily change in the number of total confirmed cases, total " + 
             			"deaths and total recovered for a particular country affected by " + 
             			"COVID-19. Graphical visualisations and tabular data available for the same.\n\n"+
-            			"Click on 'Take ScreenShot'to save the screenshot of the data displayed on screen.";
+            			"Click on 'Take ScreenShot' to save the screenshot of the data displayed on screen.";
             	alert.setContentText(s);
             	alert.show();
         	}
