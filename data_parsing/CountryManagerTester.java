@@ -9,8 +9,7 @@ public class CountryManagerTester {
     CountryManager manager = new CountryManager("timeseries.json");
     
     Country andorra = manager.getCountry("Andorra");
-    LocalDate date = LocalDate.of(2020, 4, 19);
-    DataEntry entry = andorra.getEntry(date);
+
     
   }
 }
