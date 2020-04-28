@@ -3,6 +3,7 @@ package application;
 import java.time.LocalDate;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 // Unnecessary imports because this is not the final version of the application yet.
 // This version is meant for Milestone 2 submission.
@@ -17,6 +18,11 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javax.imageio.ImageIO;
 import com.sun.prism.paint.Color;
+
+import data_parsing.Country;
+import data_parsing.CountryManager;
+import data_parsing.CountryNotFoundException;
+import data_parsing.DataEntry;
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -54,6 +60,8 @@ public class Main_GUI extends Application {
   private List<String> args;
   private static final int WINDOW_WIDTH = 940;
   private static final int WINDOW_HEIGHT = 700;
+  private CountryManager manager = new CountryManager("timeseries.json");
+
   private static final String APP_TITLE = "ateam 25 project Milestone 2";
 
   @Override
@@ -114,14 +122,19 @@ public class Main_GUI extends Application {
     // Country section
     HBox countryHB = new HBox();
     ArrayList<String> countryMenu = new ArrayList<String>();
-
+    
+    for(String countryName : manager.getAllCountries().keySet()) {
+    	countryMenu.add(countryName);
+    }
+    Collections.sort(countryMenu);
+    /*
     countryMenu.add("USA");// Displaying only USA first 10 days
     // of March data for Milestone #2
     countryMenu.add("Spain -- Not for Milestone#2");
     countryMenu.add("Italy -- Not for Milestone#2");
     countryMenu.add("France -- Not for Milestone#2");
     countryMenu.add("Germany -- Not for Milestone#2");
-
+*/
 
     ObservableList<String> ob2 = FXCollections.observableArrayList(countryMenu);
     ComboBox<String> ctMenu = new ComboBox<String>(ob2);
@@ -134,8 +147,13 @@ public class Main_GUI extends Application {
 
 
         // get the date picker value
-        String i = ctMenu.getValue();
+        String countryThatWasPicked = ctMenu.getValue();
+        
+        System.out.println(countryThatWasPicked);
+        
+        root.setCenter(drawGraph(countryThatWasPicked));
 
+        /*
         if (i == "USA") {
           // Graph in Center
           root.setCenter(drawGraph());
@@ -143,6 +161,7 @@ public class Main_GUI extends Application {
 
           // for other countries later on
         }
+        */
       }
     };
 
@@ -232,7 +251,7 @@ public class Main_GUI extends Application {
 
   // For the final submission this data would be parsed from a JSON file/API
   // and directly fed into the graph for respective countries and dates
-  private LineChart drawGraph() {
+  private LineChart drawGraph(String countryThatWasPicked) {
     ObservableList<String> ob = FXCollections.observableArrayList();
 
     CategoryAxis xAxis = new CategoryAxis();
@@ -242,13 +261,45 @@ public class Main_GUI extends Application {
     yAxis.setLabel("Total number of additional cases");
 
     LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
-    lc.setTitle("USA Cases [Sample data]");
+    lc.setTitle(countryThatWasPicked + " Cases [Sample data]");
 
     XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
     XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
     XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
+    
 
+    try {
+		Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
+		
+		HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
+		
+		Iterator myIterator = returnedCountryData.entrySet().iterator();
+		
+		while(myIterator.hasNext()) {
+            Map.Entry mapElement = (Map.Entry)myIterator.next(); 
+            DataEntry data = (DataEntry) mapElement.getValue();
+			System.out.println("Date: " + mapElement.getKey() + " Value " + data.getActive());
+		}
+		
+		List<LocalDate> dates = countryToGetDataFrom.getAllDates();
+		
+		for(LocalDate inOrderDate : dates) {
+			DataEntry data = returnedCountryData.get(inOrderDate);
+			System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
+			dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
+			
+		}
+		
+		
+	} catch (CountryNotFoundException e) {
+		// TODO Auto-generated catch block
+		
+		//TODO ADD BAD DATA ALERT?
+		e.printStackTrace();
+	}
+    
     // Confirmed cases
+    /*
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020", 74));
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/02/2020", 98));
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/03/2020", 118));
@@ -259,7 +310,9 @@ public class Main_GUI extends Application {
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/08/2020", 518));
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/09/2020", 583));
     dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/10/2020", 959));
-
+    */
+    
+    /*
     // Deaths
     dataDeaths.getData().add(new XYChart.Data<String, Number>("03/01/2020", 1));
     dataDeaths.getData().add(new XYChart.Data<String, Number>("03/02/2020", 6));
@@ -283,7 +336,8 @@ public class Main_GUI extends Application {
     dataRecovered.getData().add(new XYChart.Data<String, Number>("03/08/2020", 7));
     dataRecovered.getData().add(new XYChart.Data<String, Number>("03/09/2020", 7));
     dataRecovered.getData().add(new XYChart.Data<String, Number>("03/10/2020", 8));
-
+*/
+    
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
     dataRecovered.setName("Recovered");
