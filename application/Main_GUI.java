@@ -127,15 +127,7 @@ public class Main_GUI extends Application {
     	countryMenu.add(countryName);
     }
     Collections.sort(countryMenu);
-    /*
-    countryMenu.add("USA");// Displaying only USA first 10 days
-    // of March data for Milestone #2
-    countryMenu.add("Spain -- Not for Milestone#2");
-    countryMenu.add("Italy -- Not for Milestone#2");
-    countryMenu.add("France -- Not for Milestone#2");
-    countryMenu.add("Germany -- Not for Milestone#2");
-*/
-
+  
     ObservableList<String> ob2 = FXCollections.observableArrayList(countryMenu);
     ComboBox<String> ctMenu = new ComboBox<String>(ob2);
     countryHB.getChildren().add(ctMenu);
@@ -153,15 +145,6 @@ public class Main_GUI extends Application {
         
         root.setCenter(drawGraph(countryThatWasPicked));
 
-        /*
-        if (i == "USA") {
-          // Graph in Center
-          root.setCenter(drawGraph());
-        } else if (i == "") {
-
-          // for other countries later on
-        }
-        */
       }
     };
 
@@ -261,7 +244,7 @@ public class Main_GUI extends Application {
     yAxis.setLabel("Total number of additional cases");
 
     LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
-    lc.setTitle(countryThatWasPicked + " Cases [Sample data]");
+    lc.setTitle(countryThatWasPicked + " Cases");
 
     XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
     XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
@@ -273,21 +256,15 @@ public class Main_GUI extends Application {
 		
 		HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
 		
-		Iterator myIterator = returnedCountryData.entrySet().iterator();
-		
-		while(myIterator.hasNext()) {
-            Map.Entry mapElement = (Map.Entry)myIterator.next(); 
-            DataEntry data = (DataEntry) mapElement.getValue();
-			System.out.println("Date: " + mapElement.getKey() + " Value " + data.getActive());
-		}
-		
 		List<LocalDate> dates = countryToGetDataFrom.getAllDates();
 		
 		for(LocalDate inOrderDate : dates) {
 			DataEntry data = returnedCountryData.get(inOrderDate);
 			System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
 			dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
-			
+			dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
+			dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+
 		}
 		
 		
