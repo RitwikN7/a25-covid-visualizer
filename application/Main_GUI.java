@@ -217,7 +217,9 @@ public class Main_GUI extends Application {
     };
 
     datePicker.setOnAction(event2);
-
+	  
+// Minor changes made to add padding
+	  
     statTableVB.getChildren().add(dateLabel);
     statTableVB.getChildren().add(confirmedLabel);
     statTableVB.getChildren().add(deathsLabel);
@@ -225,11 +227,12 @@ public class Main_GUI extends Application {
 
 
     dateHB.getChildren().add(datePicker);
-    dateHB.getChildren().add(statTableVB);
 
     datePicker.setPromptText("---Select Date---");
     secondGP.add(dateHB, 1, 0);
-
+    secondGP.add(statTableVB, 2, 0);
+    secondGP.setHgap(50); 
+    secondGP.setVgap(50);
 
     VBox top = new VBox(topGP, secondGP);
     top.setSpacing(20);
