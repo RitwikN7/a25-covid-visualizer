@@ -333,6 +333,7 @@ public String toStringForDateRange(String countryName, LocalDate date1, LocalDat
 	  }
 
 //trying to fix git 
+// this is confusing
 
   /**
    * Returns a string containing all pertinent information for a country
