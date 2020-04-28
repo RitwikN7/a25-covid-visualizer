@@ -39,6 +39,9 @@ public class DataEntry {
 		if (date == null)
 			throw new IllegalArgumentException("date is null");
 		this.date = date;
+		this.deaths = deaths;
+		this.active = active;
+		this.recovered = recovered;
 	}
 
 	/**

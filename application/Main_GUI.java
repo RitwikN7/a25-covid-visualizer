@@ -173,7 +173,7 @@ public class Main_GUI extends Application {
         LocalDate i = datePicker.getValue();
 
         // get the selected date
-        dateLabel.setText("Date :" + i);
+        dateLabel.setText("Date:" + i);
         confirmedLabel.setText("Confirmed: ----");
         deathsLabel.setText("Deaths: ----");
         recoveredLabel.setText("Recovered: ----");

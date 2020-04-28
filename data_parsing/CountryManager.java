@@ -88,7 +88,7 @@ public class CountryManager {
 				Long confirmedCases = (Long) currentData.get("confirmed");
 				Long confirmedDeaths = (Long) currentData.get("deaths");
 				Long confirmedRecoveries = (Long) currentData.get("recovered");
-
+				
 				// Converts the date array to a LocalDate object
 				LocalDate localDate = LocalDate.of(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]),
 						Integer.parseInt(dateSplit[2]));
