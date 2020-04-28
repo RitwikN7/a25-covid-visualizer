@@ -7,6 +7,15 @@ import java.util.*;
 // Unnecessary imports because this is not the final version of the application yet.
 // This version is meant for Milestone 2 submission.
 
+import java.io.File;
+import com.sun.javafx.css.StyleManager;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.StackPane;
+import javax.imageio.ImageIO;
 import com.sun.prism.paint.Color;
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
@@ -43,7 +52,7 @@ import javafx.stage.Stage;
 public class Main_GUI extends Application {
 
   private List<String> args;
-  private static final int WINDOW_WIDTH = 900;
+  private static final int WINDOW_WIDTH = 940;
   private static final int WINDOW_HEIGHT = 700;
   private static final String APP_TITLE = "ateam 25 project Milestone 2";
 
@@ -51,6 +60,8 @@ public class Main_GUI extends Application {
   public void start(Stage primaryStage) throws Exception {
 
     BorderPane root = new BorderPane();
+    Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+
 
     // FIrst Grid Pane
     GridPane topGP = new GridPane();
@@ -77,8 +88,23 @@ public class Main_GUI extends Application {
     mainLabel.setText("     Welcome to aTeam25's COVID-19 Data Visualiser     ");
     labelHB.getChildren().add(mainLabel);
 
+    // screenshot functionality
+    HBox scnHB = new HBox();
+    Button scn = new Button();
+    scn.setText("Take Screenshot");
+    scnHB.getChildren().add(scn);
+    scn.setOnAction(new EventHandler<ActionEvent>() {
+         
+        @Override
+        public void handle(ActionEvent event) {
+            System.out.println("Hello World!");
+            takeSnapShot(mainScene);
+             
+        }
+    });
     topGP.add(menuHB, 0, 0);
     topGP.add(labelHB, 1, 0);
+    topGP.add(scnHB, 2, 0);
 
 
     // Second Grid Pane
@@ -182,12 +208,26 @@ public class Main_GUI extends Application {
     });
     root.setBottom(btn);
 
-    Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
     primaryStage.setTitle(APP_TITLE);
     primaryStage.setScene(mainScene);
     primaryStage.show();
 
+  }
+  
+  // take Snapshot functionality
+  
+  private void takeSnapShot(Scene scene){
+      WritableImage writableImage = 
+          new WritableImage((int)scene.getWidth(), (int)scene.getHeight());
+      scene.snapshot(writableImage);
+       
+      File file = new File("snapshot.png");
+      try {
+          ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+          System.out.println("snapshot saved: " + file.getAbsolutePath());
+      } catch (IOException ex) {
+          Logger.getLogger(Main_GUI.class.getName()).log(Level.SEVERE, null, ex);
+      }
   }
 
   // For the final submission this data would be parsed from a JSON file/API
@@ -264,5 +304,4 @@ public class Main_GUI extends Application {
     launch(args);
   }
 }
-
 
