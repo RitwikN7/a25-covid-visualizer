@@ -137,8 +137,9 @@ public class CountryManager {
 		}
 	}
 
-	// ****QUESTION: SHOULD WE CONVERT TO LOCALDATE OBJECT****
-
+	public HashMap<String,Country> getAllCountries(){
+		return countries;
+	}
 	/**
 	 * Returns number of deaths for a country on a certain date
 	 * 
