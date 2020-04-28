@@ -97,7 +97,7 @@ public class Main_GUI extends Application {
             	alert.setTitle("About");
             	alert.setHeaderText("About");
             	String s =	"This program is a COVID-19 data visualizer with an emphasis on how " + 
-            			"the statistics concerning this global pandemic for a particular country\n" + 
+            			"the statistics concerning this global pandemic for a particular country " + 
             			"have changed over time. Users can use this tool of " + 
             			"analysis to know daily change in the number of total confirmed cases, total " + 
             			"deaths and total recovered for a particular country affected by " + 
