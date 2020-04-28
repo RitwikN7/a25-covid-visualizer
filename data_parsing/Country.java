@@ -73,7 +73,10 @@ public class Country {
 	 * @return returns a DataEntry object that is obtained from the hashmap by
 	 *         searching for key date
 	 */
-	public DataEntry getEntry(LocalDate date) {
+	public DataEntry getEntry(LocalDate date) throws DateNotFoundException{
+		if(!dataEntries.containsKey(date)) {
+			throw new DateNotFoundException();
+		}
 		return dataEntries.get(date);
 	}
 
