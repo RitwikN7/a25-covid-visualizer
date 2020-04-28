@@ -105,15 +105,6 @@ public class Country {
 	 * @return a Set of all Date, DataEntry entries.
 	 */
 	public HashMap<LocalDate,DataEntry> getAllEntries() {
-
-		
-		for(Map.Entry mapElement : dataEntries.entrySet()) {
-			String key = (String) mapElement.getKey().toString();
-			DataEntry value = (DataEntry) mapElement.getValue();
-			
-			System.out.println("Date: " + key + " Value " + value.getActive());
-
-		}
 		return this.dataEntries;
 	}
 	/**

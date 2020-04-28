@@ -3,7 +3,6 @@ package application;
 import java.time.LocalDate;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 // Unnecessary imports because this is not the final version of the application yet.
 // This version is meant for Milestone 2 submission.
@@ -61,6 +60,8 @@ public class Main_GUI extends Application {
   private static final int WINDOW_WIDTH = 940;
   private static final int WINDOW_HEIGHT = 700;
   private CountryManager manager = new CountryManager("timeseries.json");
+ private  String countryThatWasPicked;
+
 
   private static final String APP_TITLE = "ateam 25 project Milestone 2";
 
@@ -135,11 +136,12 @@ public class Main_GUI extends Application {
 
     // action event
     EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
+
       public void handle(ActionEvent e) {
 
 
         // get the date picker value
-        String countryThatWasPicked = ctMenu.getValue();
+        countryThatWasPicked = ctMenu.getValue();
         
         System.out.println(countryThatWasPicked);
         
@@ -168,14 +170,20 @@ public class Main_GUI extends Application {
     Label recoveredLabel = new Label("Recovered: no data to display for Milestone #2");
     // action event
     EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
+
       public void handle(ActionEvent e) {
 
 
+
         // get the date picker value
-        LocalDate i = datePicker.getValue();
+        LocalDate startDate = datePicker.getValue();
+        LocalDate endDate = datePicker.getValue();
+        
+        System.out.println("First date picked " + startDate);
+        System.out.println("End date picked " + endDate);
 
         // get the selected date
-        dateLabel.setText("Date:" + i);
+        dateLabel.setText("Date:" + startDate);
         confirmedLabel.setText("Confirmed: ----");
         deathsLabel.setText("Deaths: ----");
         recoveredLabel.setText("Recovered: ----");
@@ -274,47 +282,7 @@ public class Main_GUI extends Application {
 		//TODO ADD BAD DATA ALERT?
 		e.printStackTrace();
 	}
-    
-    // Confirmed cases
-    /*
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020", 74));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/02/2020", 98));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/03/2020", 118));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/04/2020", 149));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/05/2020", 217));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/06/2020", 262));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/07/2020", 402));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/08/2020", 518));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/09/2020", 583));
-    dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/10/2020", 959));
-    */
-    
-    /*
-    // Deaths
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/01/2020", 1));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/02/2020", 6));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/03/2020", 7));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/04/2020", 11));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/05/2020", 12));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/06/2020", 14));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/07/2020", 17));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/08/2020", 21));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/09/2020", 22));
-    dataDeaths.getData().add(new XYChart.Data<String, Number>("03/10/2020", 28));
-
-    // Recovered
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/01/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/02/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/03/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/04/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/05/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/06/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/07/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/08/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/09/2020", 7));
-    dataRecovered.getData().add(new XYChart.Data<String, Number>("03/10/2020", 8));
-*/
-    
+      
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
     dataRecovered.setName("Recovered");
