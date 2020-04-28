@@ -87,7 +87,41 @@ public class Main_GUI extends Application {
     ComboBox<String> cbMenu = new ComboBox<String>(ob1);
     menuHB.getChildren().add(cbMenu);
     cbMenu.setPromptText("Menu");
+    EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent e) {
+        	
+        	String optionSelected = cbMenu.getValue();
+        	
+        	if (optionSelected == "About") {
+        		Alert alert = new Alert(AlertType.INFORMATION);
+            	alert.setTitle("About");
+            	alert.setHeaderText("About");
+            	String s =	"This program is a COVID-19 data visualizer with an emphasis on how\n" + 
+            			"the statistics concerning this global pandemic for a particular country\n" + 
+            			"have changed over time. Users can use this tool of\n" + 
+            			"analysis to know daily change in the number of total confirmed cases, total\n" + 
+            			"deaths and total recovered for a particular country affected by\n" + 
+            			"COVID-19. Graphical visualisations and tabular data available for the same.\n\n"+
+            			"Click on 'Take ScreenShot'to save the screenshot of the data displayed on screen.";
+            	alert.setContentText(s);
+            	alert.show();
+        	}
+        	else if (optionSelected == "Sources")
+        	{
 
+
+        	Alert alert = new Alert(AlertType.INFORMATION);
+        	alert.setTitle("Sources");
+        	alert.setHeaderText("Sources");
+        	String s ="COVID-19 data Source: https://pomber.github.io/covid19/timeseries.json\n" ;
+        	alert.setContentText(s);
+        	alert.show();
+        	}
+        }
+      };
+
+      cbMenu.setOnAction(event3);
+      
 
     // main Label
     HBox labelHB = new HBox();
@@ -241,7 +275,7 @@ public class Main_GUI extends Application {
     xAxis.setLabel("Date");
 
     NumberAxis yAxis = new NumberAxis();
-    yAxis.setLabel("Total number of additional cases");
+    yAxis.setLabel("Total number of cases");
 
     LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
     lc.setTitle(countryThatWasPicked + " Cases");
@@ -301,7 +335,6 @@ public class Main_GUI extends Application {
     dataDeaths.getData().add(new XYChart.Data<String, Number>("03/08/2020", 21));
     dataDeaths.getData().add(new XYChart.Data<String, Number>("03/09/2020", 22));
     dataDeaths.getData().add(new XYChart.Data<String, Number>("03/10/2020", 28));
-
     // Recovered
     dataRecovered.getData().add(new XYChart.Data<String, Number>("03/01/2020", 7));
     dataRecovered.getData().add(new XYChart.Data<String, Number>("03/02/2020", 7));
@@ -335,4 +368,3 @@ public class Main_GUI extends Application {
     launch(args);
   }
 }
-
