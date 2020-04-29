@@ -389,7 +389,7 @@ public class Main_GUI extends Application {
 
 				for(LocalDate inOrderDate : dates) {
 					DataEntry data = returnedCountryData.get(inOrderDate);
-					System.out.println("Data is: " + data);
+				//	System.out.println("Data is: " + data);
 				//	System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
 					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
 					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
