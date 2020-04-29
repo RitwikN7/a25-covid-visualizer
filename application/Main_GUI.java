@@ -285,6 +285,7 @@ public class Main_GUI extends Application {
 
 		rangeCB.setOnAction(rangeCBEvent);
 		to.setOnAction(event1);
+		from.setOnAction(event1);
 		ctMenu.setOnAction(event1);
 		secondGP.add(countryHB, 0, 0);
 		datePicker.setOnAction(event2);
