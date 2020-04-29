@@ -19,6 +19,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javax.imageio.ImageIO;
 import com.sun.prism.paint.Color;
+import javafx.scene.control.CheckBox;
 
 import data_parsing.Country;
 import data_parsing.CountryManager;
@@ -78,6 +79,29 @@ public class Main_GUI extends Application {
     GridPane topGP = new GridPane();
 
 
+    
+    //
+    
+    HBox box = new HBox();
+	  box.setSpacing(10);
+	  
+	  Label range = new Label("Select range for Graph");
+	  range.setFont(Font.font("Serif", FontWeight.BOLD, 18));
+	  Label one = new Label("From:");
+	  Label two = new Label("To:");
+	  
+	  DatePicker from = new DatePicker();
+	  DatePicker to = new DatePicker();
+	  
+	  CheckBox rangeCB = new CheckBox();
+	  
+	  box.getChildren().add(rangeCB);
+	  box.getChildren().add(range);
+	  box.getChildren().add(one);
+	  box.getChildren().add(from);
+	  box.getChildren().add(two);
+	  box.getChildren().add(to);
+	  
 
     // Menu section
     HBox menuHB = new HBox();
@@ -154,6 +178,9 @@ public class Main_GUI extends Application {
 
     // Second Grid Pane
     GridPane secondGP = new GridPane();
+    
+    // Third Grid Pane
+    GridPane thirdGP = new GridPane();
 
     // The date picker functionality will work directly with the
     // JSON parsed data and it displays nothing for the purposes of Milestone#2
@@ -164,13 +191,24 @@ public class Main_GUI extends Application {
     VBox statTableVB = new VBox();
 
     DatePicker datePicker = new DatePicker();
-    DatePicker datePicker2 = new DatePicker();
+ 
 
     // label to show the date
     Label dateLabel = new Label("Date: no date selected");
+    //
+    dateLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+    
     Label confirmedLabel = new Label("Confirmed:");
+    //
+    confirmedLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+    
     Label deathsLabel = new Label("Deaths:");
+    //
+    deathsLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+    
     Label recoveredLabel = new Label("Recovered:");
+    //
+    recoveredLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
 
 
     // Country section
@@ -199,7 +237,7 @@ public class Main_GUI extends Application {
 
         if(secondDatePicked) {
         	System.out.println("2 dates picked");
-        	root.setCenter(drawGraph(countryThatWasPicked, datePicker.getValue(),datePicker2.getValue()));
+        	root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
 
         }
         else {
@@ -227,21 +265,33 @@ public class Main_GUI extends Application {
       }
     };
     
-    EventHandler<ActionEvent> secondDatePickedEvent = new EventHandler<ActionEvent>() {
+    
+    
+    EventHandler<ActionEvent> rangeCBEvent = new EventHandler<ActionEvent>() {
     	public void handle(ActionEvent e) {
 
+    		if (rangeCB.isSelected())
+    		{
     		secondDatePicked = true;
             String countryThatWasPicked = ctMenu.getValue();
 
-        	root.setCenter(drawGraph(countryThatWasPicked, datePicker.getValue(),datePicker2.getValue()));
+        	root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
 
+    		}
+    		else 
+    		{
+    			secondDatePicked = false;
+    			String countryThatWasPicked = ctMenu.getValue();
+    			root.setCenter(drawGraph(countryThatWasPicked,null,null));
+    		}
     	}
     };
     
+    rangeCB.setOnAction(rangeCBEvent);
     ctMenu.setOnAction(event1);
     secondGP.add(countryHB, 0, 0);
     datePicker.setOnAction(event2);
-    datePicker2.setOnAction(secondDatePickedEvent);
+   // to.setOnAction(secondDatePickedEvent);
 	  
 // Minor changes made to add padding
 	  
@@ -254,25 +304,36 @@ public class Main_GUI extends Application {
     dateHB.getChildren().add(datePicker);
 
     datePicker.setPromptText("---Select Date---");
-    datePicker2.setPromptText("---Select Date2---");
+    to.setPromptText("---Select Date2---");
     secondGP.add(dateHB, 1, 0);
     secondGP.add(statTableVB, 2, 0);
-    secondGP.add(datePicker2, 3, 0);
+    // secondGP.add(datePicker2, 3, 0);
+    
     secondGP.setHgap(50); 
     secondGP.setVgap(50);
 
+    // adding to third gp
+    
+    thirdGP.add(box, 0, 0);
+    
+    
+  
     VBox top = new VBox(topGP, secondGP);
     top.setSpacing(20);
     root.setTop(top);
 
 
+  
     // Part: Adding an Exit button bottom panel
-    Button btn = new Button("Close");
-    btn.setText("Close");
+    Button btn = new Button("Close Application");
+    btn.setText("Close Application");
     btn.setOnAction(ae -> {
       primaryStage.close();
     });
-    root.setBottom(btn);
+    
+    VBox bottom = new VBox(thirdGP, btn);
+    bottom.setSpacing(20);
+    root.setBottom(bottom);
 
     primaryStage.setTitle(APP_TITLE);
     primaryStage.setScene(mainScene);
