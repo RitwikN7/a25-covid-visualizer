@@ -210,7 +210,6 @@ public class Main_GUI extends Application {
 		//
 		recoveredLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
 
-
 		// Country section
 		HBox countryHB = new HBox();
 		ArrayList<String> countryMenu = new ArrayList<String>();
@@ -233,8 +232,6 @@ public class Main_GUI extends Application {
 				// get the date picker value
 				String countryThatWasPicked = ctMenu.getValue();
 
-				System.out.println(countryThatWasPicked);
-
 				if(secondDatePicked) {
 					System.out.println("2 dates picked");
 					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
@@ -253,8 +250,6 @@ public class Main_GUI extends Application {
 			}
 
 		};
-
-
 
 		// action event to fill table
 		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
@@ -305,7 +300,8 @@ public class Main_GUI extends Application {
 		dateHB.getChildren().add(datePicker);
 
 		datePicker.setPromptText("---Select Date---");
-		to.setPromptText("---Select Date2---");
+		from.setPromptText(("\t  ---Start Date---"));
+		to.setPromptText("\t  ---End Date---");
 		secondGP.add(dateHB, 1, 0);
 		secondGP.add(statTableVB, 2, 0);
 		// secondGP.add(datePicker2, 3, 0);
@@ -391,7 +387,7 @@ public class Main_GUI extends Application {
 			noCountryAlert.showAndWait();
 		} catch (DateNotFoundException e2) {
 			Alert dataNotFound = new Alert(AlertType.ERROR,
-					"We could not find any data for this day, please select another");
+					"We could not find any data for this day: "+ date + ", please select another");
 			dataNotFound.showAndWait();
 		}
 	}
@@ -399,9 +395,8 @@ public class Main_GUI extends Application {
 	// For the final submission this data would be parsed from a JSON file/API
 	// and directly fed into the graph for respective countries and dates
 	private LineChart drawGraph(String countryThatWasPicked,LocalDate start, LocalDate end) {
-		System.out.println("start is:" + start);
-		System.out.println("end is:" + end);
-
+		
+		
 		ObservableList<String> ob = FXCollections.observableArrayList();
 
 		CategoryAxis xAxis = new CategoryAxis();
@@ -411,7 +406,7 @@ public class Main_GUI extends Application {
 		yAxis.setLabel("Total number of cases");
 
 		LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
-		lc.setTitle(countryThatWasPicked + " Cases");
+		lc.setTitle(countryThatWasPicked);
 
 		XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
 		XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
@@ -428,7 +423,6 @@ public class Main_GUI extends Application {
 
 				for(LocalDate inOrderDate : dates) {
 					DataEntry data = returnedCountryData.get(inOrderDate);
-					//	System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
 					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
 					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
 					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
@@ -436,7 +430,6 @@ public class Main_GUI extends Application {
 			} catch (CountryNotFoundException e) {
 				// TODO Auto-generated catch block
 
-				//TODO ADD BAD DATA ALERT?
 				Alert noCountryAlert =
 						new Alert(AlertType.ERROR, "Please select a different country");
 				noCountryAlert.showAndWait();			
@@ -444,6 +437,12 @@ public class Main_GUI extends Application {
 
 		}
 		else {
+			
+			if(end.isBefore(start)) {
+				Alert invalidDateRange =
+						new Alert(AlertType.ERROR, "Please make sure that ending date is after start date ");
+				invalidDateRange.showAndWait();			
+			}
 			try {
 				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
@@ -452,9 +451,7 @@ public class Main_GUI extends Application {
 				List<LocalDate> dates = countryToGetDataFrom.getAllDatesInRange(start,end);
 
 				for(LocalDate inOrderDate : dates) {
-					DataEntry data = returnedCountryData.get(inOrderDate);
-					//	System.out.println("Data is: " + data);
-					//	System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
+					DataEntry data = returnedCountryData.get(inOrderDate); 
 					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
 					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
 					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
@@ -468,7 +465,6 @@ public class Main_GUI extends Application {
 				Alert dataNotFound = new Alert(AlertType.ERROR,
 						"We could not find any data for this day, please select another");
 				dataNotFound.showAndWait();
-				//TODO ADD BAD DATA ALERT?
 			}
 		}
 
