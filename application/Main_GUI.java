@@ -1,7 +1,6 @@
 package application;
 
 import java.time.LocalDate;
-
 import java.util.*;
 
 // Unnecessary imports because this is not the final version of the application yet.
@@ -10,6 +9,7 @@ import java.util.*;
 import java.io.File;
 import com.sun.javafx.css.StyleManager;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
@@ -22,6 +22,7 @@ import data_parsing.Country;
 import data_parsing.CountryManager;
 import data_parsing.CountryNotFoundException;
 import data_parsing.DataEntry;
+import data_parsing.DateNotFoundException;
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -130,36 +131,51 @@ public class Main_GUI extends Application {
     scnHB.getChildren().add(scn);
     scn.setOnAction(new EventHandler<ActionEvent>() {
 
-      @Override
-      public void handle(ActionEvent event) {
-        System.out.println("Hello World!");
-        takeSnapShot(mainScene);
+  @Override
+  public void handle(ActionEvent event) {
+    System.out.println("Hello World!");
+    takeSnapShot(mainScene);
 
-      }
-    });
-    topGP.add(menuHB, 0, 0);
-    topGP.add(labelHB, 1, 0);
-    topGP.add(scnHB, 2, 0);
+  }});topGP.add(menuHB,0,0);topGP.add(labelHB,1,0);topGP.add(scnHB,2,0);
 
-    // Second Grid Pane
-    GridPane secondGP = new GridPane();
+  // Second Grid Pane
+  GridPane secondGP = new GridPane();
 
-    // Country section
-    HBox countryHB = new HBox();
-    ArrayList<String> countryMenu = new ArrayList<String>();
+  <<<<<<<HEAD=======
+  // The date picker functionality will work directly with the
+  // JSON parsed data and it displays nothing for the purposes of Milestone#2
 
-    for (String countryName : manager.getAllCountries().keySet()) {
-      countryMenu.add(countryName);
-    }
-    Collections.sort(countryMenu);
+  // Date picker
+  HBox dateHB = new HBox();
 
-    ObservableList<String> ob2 = FXCollections.observableArrayList(countryMenu);
-    ComboBox<String> ctMenu = new ComboBox<String>(ob2);
-    countryHB.getChildren().add(ctMenu);
-    ctMenu.setPromptText("---Select Country---");
+  VBox statTableVB = new VBox();
 
-    // action event
-    EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
+  DatePicker datePicker = new DatePicker();
+
+  // label to show the date
+  Label dateLabel = new Label("Date: no date selected");
+  Label confirmedLabel = new Label("Confirmed:");
+  Label deathsLabel = new Label("Deaths:");
+  Label recoveredLabel = new Label("Recovered:");
+
+  >>>>>>>13f 42d 7
+  ad8d80279043fb842317b00f7d8422e48
+  // Country section
+  HBox countryHB=new HBox();
+  ArrayList<String> countryMenu = new ArrayList<String>();
+
+  for(
+  String countryName:manager.getAllCountries().keySet())
+  {
+    countryMenu.add(countryName);
+  }Collections.sort(countryMenu);
+
+  ObservableList<String> ob2 = FXCollections.observableArrayList(countryMenu);
+  ComboBox<String> ctMenu = new ComboBox<String>(
+      ob2);countryHB.getChildren().add(ctMenu);ctMenu.setPromptText("---Select Country---");
+
+  // action event
+  EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
 
       public void handle(ActionEvent e) {
 
@@ -170,75 +186,42 @@ public class Main_GUI extends Application {
 
         root.setCenter(drawGraph(countryThatWasPicked));
 
+        // if there is a date selected, the table information is updated.
+        if (!(datePicker.getValue() == null)) {
+        fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel, recoveredLabel);
+        }
+
       }
     };
 
     ctMenu.setOnAction(event1);
     secondGP.add(countryHB, 0, 0);
 
-    // The date picker functionality will work directly with the
-    // JSON parsed data and it displays nothing for the purposes of Milestone#2
 
-    // Date picker
-    HBox dateHB = new HBox();
-
-    VBox statTableVB = new VBox();
-
-    DatePicker datePicker = new DatePicker();
-
-    // label to show the date
-    Label dateLabel = new Label("Date: no date selected");
-    Label confirmedLabel = new Label("Confirmed: no data to display for Milestone #2");
-    Label deathsLabel = new Label("Deaths: no data to display for Milestone #2");
-    Label recoveredLabel = new Label("Recovered: no data to display for Milestone #2");
     // action event
-    EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
-
+  EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
       public void handle(ActionEvent e) {
+        fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel,recoveredLabel);}};
 
-        // get the date picker value
-        LocalDate startDate = datePicker.getValue();
-        LocalDate endDate = datePicker.getValue();
+  datePicker.setOnAction(event2);
 
-        System.out.println("First date picked " + startDate);
-        System.out.println("End date picked " + endDate);
+  // Minor changes made to add padding
 
-        // get the selected date
-        dateLabel.setText("Date:" + startDate);
-        confirmedLabel.setText("Confirmed: ----");
-        deathsLabel.setText("Deaths: ----");
-        recoveredLabel.setText("Recovered: ----");
-      }
-    };
+  statTableVB.getChildren().add(dateLabel);statTableVB.getChildren().add(confirmedLabel);statTableVB.getChildren().add(deathsLabel);statTableVB.getChildren().add(recoveredLabel);
 
-    datePicker.setOnAction(event2);
+  dateHB.getChildren().add(datePicker);
 
-    statTableVB.getChildren().add(dateLabel);
-    statTableVB.getChildren().add(confirmedLabel);
-    statTableVB.getChildren().add(deathsLabel);
-    statTableVB.getChildren().add(recoveredLabel);
+  datePicker.setPromptText("---Select Date---");secondGP.add(dateHB,1,0);
 
-    dateHB.getChildren().add(datePicker);
-    dateHB.getChildren().add(statTableVB);
+  VBox top = new VBox(topGP, secondGP);top.setSpacing(20);root.setTop(top);
 
-    datePicker.setPromptText("---Select Date---");
-    secondGP.add(dateHB, 1, 0);
+  // Part: Adding an Exit button bottom panel
+  Button btn = new Button("Close");btn.setText("Close");btn.setOnAction(ae->
+  {
+    primaryStage.close();
+  });root.setBottom(btn);
 
-    VBox top = new VBox(topGP, secondGP);
-    top.setSpacing(20);
-    root.setTop(top);
-
-    // Part: Adding an Exit button bottom panel
-    Button btn = new Button("Close");
-    btn.setText("Close");
-    btn.setOnAction(ae -> {
-      primaryStage.close();
-    });
-    root.setBottom(btn);
-
-    primaryStage.setTitle(APP_TITLE);
-    primaryStage.setScene(mainScene);
-    primaryStage.show();
+  primaryStage.setTitle(APP_TITLE);primaryStage.setScene(mainScene);primaryStage.show();
 
   }
 
@@ -297,7 +280,7 @@ public class Main_GUI extends Application {
       // TODO ADD BAD DATA ALERT?
       e.printStackTrace();
     }
-    
+
     // Confirmed cases
     /*
      * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020",
@@ -327,22 +310,24 @@ public class Main_GUI extends Application {
      * Number>("03/07/2020", 17)); dataDeaths.getData().add(new XYChart.Data<String,
      * Number>("03/08/2020", 21)); dataDeaths.getData().add(new XYChart.Data<String,
      * Number>("03/09/2020", 22)); dataDeaths.getData().add(new XYChart.Data<String,
-     * Number>("03/10/2020", 28)); // Recovered dataRecovered.getData().add(new
-     * XYChart.Data<String, Number>("03/01/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/02/2020",
+     * Number>("03/10/2020", 28));
+     *
+     * // Recovered dataRecovered.getData().add(new XYChart.Data<String,
+     * Number>("03/01/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/02/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/03/2020",
      * 7)); dataRecovered.getData().add(new XYChart.Data<String,
-     * Number>("03/03/2020", 7)); dataRecovered.getData().add(new
-     * XYChart.Data<String, Number>("03/04/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/05/2020",
+     * Number>("03/04/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/05/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/06/2020",
      * 7)); dataRecovered.getData().add(new XYChart.Data<String,
-     * Number>("03/06/2020", 7)); dataRecovered.getData().add(new
-     * XYChart.Data<String, Number>("03/07/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/08/2020",
+     * Number>("03/07/2020", 7)); dataRecovered.getData().add(new
+     * XYChart.Data<String, Number>("03/08/2020", 7));
+     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/09/2020",
      * 7)); dataRecovered.getData().add(new XYChart.Data<String,
-     * Number>("03/09/2020", 7)); dataRecovered.getData().add(new
-     * XYChart.Data<String, Number>("03/10/2020", 8));
+     * Number>("03/10/2020", 8));
      */
-    
+
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
     dataRecovered.setName("Recovered");
@@ -356,7 +341,7 @@ public class Main_GUI extends Application {
 
   /**
    * Main method that just calls launch and passes the args
-   * 
+   *
    * @param args
    */
   public static void main(String[] args) {
