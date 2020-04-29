@@ -310,6 +310,7 @@ public class Main_GUI extends Application {
    */
   private void fillTable(String countryName, LocalDate date, Label dateLabel, Label confirmedLabel, Label deathsLabel, Label recoveredLabel) {
     try {
+      
       // Get country data
       Country selectedCountry = manager.getCountry(countryName);
       DataEntry data = selectedCountry.getEntry(date);
@@ -319,7 +320,7 @@ public class Main_GUI extends Application {
       commasIncluded.setGroupingUsed(true);
 
       // Update table to show data on a given day
-      dateLabel.setText("Date:" + date);
+      dateLabel.setText("Date: " + date);
       confirmedLabel.setText("Confirmed: " + commasIncluded.format(data.getActive()));
       deathsLabel.setText("Deaths: " + commasIncluded.format(data.getDeaths()));
       recoveredLabel.setText("Recovered: " + commasIncluded.format(data.getRecovered()));
