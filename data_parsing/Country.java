@@ -97,7 +97,7 @@ public class Country {
 		this.dataEntries.put(date, entry);
 	}
 
-	
+
 	/**
 	 * Returns a Set of all of the entries in the HashMap so that this Country can
 	 * be iterated over.
@@ -111,12 +111,23 @@ public class Country {
 	 * Returns a sorted list of all the dates for this country
 	 * @return
 	 */
-	
+
 	public List<LocalDate> getAllDates(){
 		List<LocalDate> toReturn = new ArrayList<LocalDate>(this.dataEntries.keySet());
 		Collections.sort(toReturn);
 		return toReturn;
 	}
+
+	public List<LocalDate> getAllDatesInRange(LocalDate date1, LocalDate date2){
+		List<LocalDate> toReturn = new ArrayList<LocalDate>();
+		for (LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
+			if(this.getAllDates().contains(start)) {
+				toReturn.add(start);
+			}
+		}
+		return toReturn;
+	}
+
 	/**
 	 * Returns a Set of all of the entries in the HashMap so that this Country can
 	 * be iterated over.
@@ -127,7 +138,7 @@ public class Country {
 
 		return this.dataEntries.entrySet();
 	}
-	
+
 	/**
 	 * Returns the total number of deaths for a country
 	 * @return an int of the total deaths in this Country
@@ -135,15 +146,15 @@ public class Country {
 	protected int getTotalNumDeaths() {
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntriesEntrySet();
 		int total = 0;
-		
+
 		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getDeaths();
 		}
 		return total;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Returns the total number of recovered cases for a country
 	 * @return an int of the total number of recovered cases in this country.
@@ -151,24 +162,24 @@ public class Country {
 	protected int getTotalNumRecovered() {
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntriesEntrySet();
 		int total = 0;
-		
+
 		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getRecovered();
 		}
 		return total;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Returns the total number of active cases for a country
 	 * @return an int of the total active cases in this country.
 	 */
 	protected int getTotalNumActive() 
-{
+	{
 		Set<Entry<LocalDate,DataEntry>> allDays = this.getAllEntriesEntrySet();
 		int total = 0;
-		
+
 		for(Entry<LocalDate,DataEntry> toGetDataFrom: allDays) {
 			total += toGetDataFrom.getValue().getActive();
 		}

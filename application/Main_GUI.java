@@ -63,6 +63,7 @@ public class Main_GUI extends Application {
   private static final int WINDOW_WIDTH = 940;
   private static final int WINDOW_HEIGHT = 700;
   private CountryManager manager = new CountryManager("timeseries.json");
+  boolean secondDatePicked = false;
 
   private static final String APP_TITLE = "ateam 25 project Milestone 2";
 
@@ -196,7 +197,15 @@ public class Main_GUI extends Application {
 
         System.out.println(countryThatWasPicked);
 
-        root.setCenter(drawGraph(countryThatWasPicked));
+        if(secondDatePicked) {
+        	System.out.println("2 dates picked");
+        	root.setCenter(drawGraph(countryThatWasPicked, datePicker.getValue(),datePicker2.getValue()));
+
+        }
+        else {
+            root.setCenter(drawGraph(countryThatWasPicked,null,null));
+
+        }
 
         // if there is a date selected, the table information is updated.
         if (!(datePicker.getValue() == null)) {
@@ -204,20 +213,35 @@ public class Main_GUI extends Application {
         }
 
       }
+
     };
 
-    ctMenu.setOnAction(event1);
-    secondGP.add(countryHB, 0, 0);
 
 
     // action event
     EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
+
       public void handle(ActionEvent e) {
+
         fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel, recoveredLabel);
       }
     };
+    
+    EventHandler<ActionEvent> secondDatePickedEvent = new EventHandler<ActionEvent>() {
+    	public void handle(ActionEvent e) {
 
+    		secondDatePicked = true;
+            String countryThatWasPicked = ctMenu.getValue();
+
+        	root.setCenter(drawGraph(countryThatWasPicked, datePicker.getValue(),datePicker2.getValue()));
+
+    	}
+    };
+    
+    ctMenu.setOnAction(event1);
+    secondGP.add(countryHB, 0, 0);
     datePicker.setOnAction(event2);
+    datePicker2.setOnAction(secondDatePickedEvent);
 	  
 // Minor changes made to add padding
 	  
@@ -256,8 +280,11 @@ public class Main_GUI extends Application {
 
   }
 
-  // take Snapshot functionality
-
+  /**
+   * Creates screeenshot functionality
+   * Saves .png file to working directory
+   * @param scene
+   */
   private void takeSnapShot(Scene scene) {
     WritableImage writableImage =
         new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
@@ -309,84 +336,77 @@ public class Main_GUI extends Application {
 
   // For the final submission this data would be parsed from a JSON file/API
   // and directly fed into the graph for respective countries and dates
-  private LineChart drawGraph(String countryThatWasPicked) {
-    ObservableList<String> ob = FXCollections.observableArrayList();
+  private LineChart drawGraph(String countryThatWasPicked,LocalDate start, LocalDate end) {
+	  System.out.println("start is:" + start);
+	  System.out.println("end is:" + end);
 
-    CategoryAxis xAxis = new CategoryAxis();
-    xAxis.setLabel("Date");
+	  ObservableList<String> ob = FXCollections.observableArrayList();
 
-    NumberAxis yAxis = new NumberAxis();
-    yAxis.setLabel("Total number of cases");
+	    CategoryAxis xAxis = new CategoryAxis();
+	    xAxis.setLabel("Date");
 
-    LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
-    lc.setTitle(countryThatWasPicked + " Cases");
+	    NumberAxis yAxis = new NumberAxis();
+	    yAxis.setLabel("Total number of cases");
 
-    XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
-    XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
-    XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
+	    LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
+	    lc.setTitle(countryThatWasPicked + " Cases");
+
+	    XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
+	    XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
+	    XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
+
+	  
+	  if(start == null && end == null) {
+		  try {
+				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
+
+				HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
+
+				List<LocalDate> dates = countryToGetDataFrom.getAllDates();
+
+				for(LocalDate inOrderDate : dates) {
+					DataEntry data = returnedCountryData.get(inOrderDate);
+				//	System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
+					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
+					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
+					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+				}
+			} catch (CountryNotFoundException e) {
+				// TODO Auto-generated catch block
+
+				//TODO ADD BAD DATA ALERT?
+				e.printStackTrace();
+			}
+
+	  }
+	  else {
+		  try {
+				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
+
+				HashMap<LocalDate,DataEntry> returnedCountryData = manager.getNumActiveForDateRange(countryThatWasPicked, start, end);
+
+				List<LocalDate> dates = countryToGetDataFrom.getAllDatesInRange(start,end);
+
+				for(LocalDate inOrderDate : dates) {
+					DataEntry data = returnedCountryData.get(inOrderDate);
+					System.out.println("Data is: " + data);
+				//	System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
+					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
+					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
+					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+
+				}
 
 
-    try {
-		Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
+			} catch (CountryNotFoundException | DateNotFoundException e) {
+				// TODO Auto-generated catch block
 
-		HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
-
-		List<LocalDate> dates = countryToGetDataFrom.getAllDates();
-
-		for(LocalDate inOrderDate : dates) {
-			DataEntry data = returnedCountryData.get(inOrderDate);
-			System.out.println("Current Date: " + inOrderDate +  " & Number of Confirmed Cases " + data.getActive());
-			dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
-			dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
-			dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
-
-		}
-
-
-	} catch (CountryNotFoundException e) {
-		// TODO Auto-generated catch block
-
-		//TODO ADD BAD DATA ALERT?
-		e.printStackTrace();
-	}
-
-    // Confirmed cases
-    /*
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020", 74));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/02/2020", 98));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/03/2020", 118));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/04/2020", 149));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/05/2020", 217));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/06/2020", 262));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/07/2020", 402));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/08/2020", 518));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/09/2020", 583));
-     * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/10/2020", 959));
-     */
-
-    /*
-     * // Deaths dataDeaths.getData().add(new XYChart.Data<String, Number>("03/01/2020", 1));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/02/2020", 6));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/03/2020", 7));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/04/2020", 11));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/05/2020", 12));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/06/2020", 14));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/07/2020", 17));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/08/2020", 21));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/09/2020", 22));
-     * dataDeaths.getData().add(new XYChart.Data<String, Number>("03/10/2020", 28));
-     *
-     * // Recovered dataRecovered.getData().add(new XYChart.Data<String, Number>("03/01/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/02/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/03/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/04/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/05/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/06/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/07/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/08/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/09/2020", 7));
-     * dataRecovered.getData().add(new XYChart.Data<String, Number>("03/10/2020", 8));
-     */
+				//TODO ADD BAD DATA ALERT?
+				e.printStackTrace();
+			}
+	  }
+  
+    
 
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
@@ -398,6 +418,8 @@ public class Main_GUI extends Application {
 
     return lc;
   }
+  
+	
 
   /**
    * Main method that just calls launch and passes the args

@@ -251,14 +251,14 @@ public class CountryManager {
 	 * @throws CountryNotFoundException when Country not found in the hashmap
 	 * @throws DateNotFoundException 
 	 */
-	public HashMap<LocalDate, Integer> getNumActiveForDateRange(String countryName, LocalDate date1, LocalDate date2)
+	public HashMap<LocalDate, DataEntry> getNumActiveForDateRange(String countryName, LocalDate date1, LocalDate date2)
 			throws CountryNotFoundException, DateNotFoundException {
-		HashMap<LocalDate, Integer> toReturn = new HashMap<LocalDate, Integer>();
+		HashMap<LocalDate, DataEntry> toReturn = new HashMap<LocalDate, DataEntry>();
 		Country countryToGetStatsFrom = this.getCountry(countryName);
 
 		for (LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
-			int numActive = this.getNumActiveForCountryOnCertainDate(countryName, start);
-			toReturn.put(start, numActive);
+			
+			toReturn.put(start, countryToGetStatsFrom.getEntry(start));
 		}
 
 		return toReturn;
