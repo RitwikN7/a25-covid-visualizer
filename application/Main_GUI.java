@@ -297,7 +297,7 @@ public class Main_GUI extends Application {
       // TODO ADD BAD DATA ALERT?
       e.printStackTrace();
     }
-
+    
     // Confirmed cases
     /*
      * dataConfirmed.getData().add(new XYChart.Data<String, Number>("03/01/2020",
@@ -342,7 +342,7 @@ public class Main_GUI extends Application {
      * Number>("03/09/2020", 7)); dataRecovered.getData().add(new
      * XYChart.Data<String, Number>("03/10/2020", 8));
      */
-
+    
     dataConfirmed.setName("Confirmed");
     dataDeaths.setName("Deaths");
     dataRecovered.setName("Recovered");

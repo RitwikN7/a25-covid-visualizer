@@ -124,7 +124,6 @@ public class Country {
 	 * @return a Set of all Date, DataEntry entries.
 	 */
 	private Set<Entry<LocalDate, DataEntry>> getAllEntriesEntrySet() {
-		List<LocalDate> sortedDates = new ArrayList<LocalDate>();
 
 		return this.dataEntries.entrySet();
 	}
