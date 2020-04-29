@@ -90,7 +90,8 @@ public class DataEntry {
 	@Override
 	public String toString() {
 		String result = date.toString();
-		result = result.substring(4, 10) + " " + result.substring(result.length() - 4); // takes just month, day, year
+		result = result.substring(5, 7) + " / " + result.substring(8, 10);
+		//+ " " + result.substring(result.length() - 4); // takes just month, day, year
 		return result;
 	}
 
