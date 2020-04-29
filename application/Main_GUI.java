@@ -254,9 +254,7 @@ public class Main_GUI extends Application {
 
 		// action event to fill table
 		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
-
 			public void handle(ActionEvent e) {
-
 				fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel, recoveredLabel);
 			}
 		};
