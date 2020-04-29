@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: halverson
-Class-Path: javafx-sdk-11.0.2/lib/javafx.controls.jar javafx-sdk-11.0.2/lib/javafx.fxml.jar
-Main-Class: application.Main_GUI
+Class-Path: json-simple-1.1.1.jar
+Main-Class: application.Main
