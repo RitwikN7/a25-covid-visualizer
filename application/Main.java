@@ -58,7 +58,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-public class Main_GUI extends Application {
+public class Main extends Application {
 
 	private List<String> args;
 	private static final int WINDOW_WIDTH = 940;
@@ -78,8 +78,6 @@ public class Main_GUI extends Application {
 
 		// FIrst Grid Pane
 		GridPane topGP = new GridPane();
-
-
 
 		//
 
@@ -352,7 +350,7 @@ public class Main_GUI extends Application {
 			ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
 			System.out.println("snapshot saved: " + file.getAbsolutePath());
 		} catch (IOException ex) {
-			Logger.getLogger(Main_GUI.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
