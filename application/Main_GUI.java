@@ -71,6 +71,7 @@ public class Main_GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+
 		BorderPane root = new BorderPane();
 		Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -85,7 +86,7 @@ public class Main_GUI extends Application {
 		HBox box = new HBox();
 		box.setSpacing(10);
 
-		Label range = new Label("Select range for Graph");
+		Label range = new Label("Select range for graph");
 		range.setFont(Font.font("Serif", FontWeight.BOLD, 18));
 		Label one = new Label("From:");
 		Label two = new Label("To:");
@@ -313,13 +314,10 @@ public class Main_GUI extends Application {
 
 		thirdGP.add(box, 0, 0);
 
-
-
 		VBox top = new VBox(topGP, secondGP);
 		top.setSpacing(20);
 		root.setTop(top);
-
-
+		
 
 		// Part: Adding an Exit button bottom panel
 		Button btn = new Button("Close Application");
@@ -392,8 +390,14 @@ public class Main_GUI extends Application {
 		}
 	}
 
-	// For the final submission this data would be parsed from a JSON file/API
-	// and directly fed into the graph for respective countries and dates
+	/**
+	 * Draws the graph
+	 * If date range given, draw that new graph
+	 * @param countryThatWasPicked
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	private LineChart drawGraph(String countryThatWasPicked,LocalDate start, LocalDate end) {
 		
 		
