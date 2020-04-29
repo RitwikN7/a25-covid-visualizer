@@ -443,11 +443,6 @@ public class Main_GUI extends Application {
 		}
 		else {
 			
-			if(end.isBefore(start)) {
-				Alert invalidDateRange =
-						new Alert(AlertType.ERROR, "Please make sure that ending date is after start date ");
-				invalidDateRange.showAndWait();			
-			}
 			try {
 				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
@@ -470,7 +465,11 @@ public class Main_GUI extends Application {
 				Alert dataNotFound = new Alert(AlertType.ERROR,
 						"We could not find any data for this day, please select another");
 				dataNotFound.showAndWait();
-			}
+			}	catch (NullPointerException e) {
+				Alert dataNotFound = new Alert(AlertType.ERROR,
+						"Please make sure to enter both a start and end date to view data for a certain range");
+				dataNotFound.showAndWait();
+				}
 		}
 
 
