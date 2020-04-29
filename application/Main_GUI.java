@@ -442,7 +442,11 @@ public class Main_GUI extends Application {
 
 		}
 		else {
-			
+			if(end.isBefore(start)) {
+				Alert dataNotFound = new Alert(AlertType.ERROR,
+						"Please make sure your end date is after your start date");
+				dataNotFound.showAndWait();
+			}
 			try {
 				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
