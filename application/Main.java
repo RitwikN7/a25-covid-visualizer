@@ -31,6 +31,9 @@ import java.time.LocalDate;
 import java.util.*;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.logging.Level;
@@ -50,6 +53,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -84,7 +88,7 @@ public class Main extends Application {
 		BorderPane root = new BorderPane();
 		Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		// FIrst Grid Pane
+		// First Grid Pane
 		GridPane topGP = new GridPane();
 
 		//
@@ -93,7 +97,7 @@ public class Main extends Application {
 		box.setSpacing(10);
 
 		Label range = new Label("Select range for graph");
-		range.setFont(Font.font("Serif", FontWeight.BOLD, 18));
+		range.setFont(Font.font("Avenir", FontWeight.BOLD, 18));
 		Label one = new Label("From:");
 		Label two = new Label("To:");
 
@@ -111,6 +115,7 @@ public class Main extends Application {
 
 		// Menu section
 		HBox menuHB = new HBox();
+		menuHB.setPadding(new Insets(0,0,0,0));
 		ArrayList<String> mainMenu = new ArrayList<String>();
 
 		mainMenu.add("About");
@@ -154,28 +159,49 @@ public class Main extends Application {
 
 		// main Label
 		HBox labelHB = new HBox();
+		labelHB.setPadding(new Insets(0,0,0,225));
 		Label mainLabel = new Label();
-		mainLabel.setFont(Font.font("Serif", FontWeight.NORMAL, 30));
+		mainLabel.setFont(Font.font("Avenir Next", FontWeight.NORMAL, 25));
 		mainLabel.setText("     Welcome to aTeam25's COVID-19 Data Visualiser     ");
 		labelHB.getChildren().add(mainLabel);
 
 		// screenshot functionality
-		HBox scnHB = new HBox();
+		VBox scnVB = new VBox();
+		scnVB.setPadding(new Insets(0,0,0,200));
+		scnVB.setSpacing(5);
+		
+		// screenshot button
 		Button scn = new Button();
 		scn.setText("Take Screenshot");
-		scnHB.getChildren().add(scn);
+		
+		// Save Entry Button
+		Button stxt = new Button();
+		stxt.setText("Save Data Entry");
+		
+		
+		// Event handle for Screenshot button
+		scnVB.getChildren().add(scn);  // Add to VBox
 		scn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Hello World!");
+				System.out.println("snapshot saved");
 				takeSnapShot(mainScene);
 
 			}
 		});
+		
+		// Event handle for Save Entry button ... eventSE
+		scnVB.getChildren().add(stxt); // Add to VBox
+
+
+	
+		
+		
+		// Add elements to topGP
 		topGP.add(menuHB, 0, 0);
 		topGP.add(labelHB, 1, 0);
-		topGP.add(scnHB, 2, 0);
+		topGP.add(scnVB, 2, 0);
 
 		// Second Grid Pane
 		GridPane secondGP = new GridPane();
@@ -188,6 +214,7 @@ public class Main extends Application {
 
 		// Date picker
 		HBox dateHB = new HBox();
+		dateHB.setPadding(new Insets(0,0,0,100));
 
 		VBox statTableVB = new VBox();
 
@@ -196,22 +223,23 @@ public class Main extends Application {
 		// label to show the date
 		Label dateLabel = new Label("Date: no date selected");
 		//
-		dateLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+		dateLabel.setFont(Font.font("Avenir", FontWeight.SEMI_BOLD, 15));
 
 		Label confirmedLabel = new Label("Confirmed:");
 		//
-		confirmedLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+		confirmedLabel.setFont(Font.font("Avenir", FontWeight.SEMI_BOLD, 15));
 
 		Label deathsLabel = new Label("Deaths:");
 		//
-		deathsLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+		deathsLabel.setFont(Font.font("Avenir", FontWeight.SEMI_BOLD, 15));
 
 		Label recoveredLabel = new Label("Recovered:");
 		//
-		recoveredLabel.setFont(Font.font("Serif", FontWeight.SEMI_BOLD, 15));
+		recoveredLabel.setFont(Font.font("Avenir", FontWeight.SEMI_BOLD, 15));
 
 		// Country section
 		HBox countryHB = new HBox();
+		countryHB.setPadding(new Insets(0,0,0,10));
 		ArrayList<String> countryMenu = new ArrayList<String>();
 
 		for (String countryName : manager.getAllCountries().keySet()) {
@@ -274,6 +302,13 @@ public class Main extends Application {
 				}
 			}
 		};
+		
+		EventHandler<ActionEvent> eventSE = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				saveEntry(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel,
+						recoveredLabel);
+			}
+		};
 
 		rangeCB.setOnAction(rangeCBEvent);
 		to.setOnAction(event1);
@@ -281,6 +316,7 @@ public class Main extends Application {
 		ctMenu.setOnAction(event1);
 		secondGP.add(countryHB, 0, 0);
 		datePicker.setOnAction(event2);
+		stxt.setOnAction(eventSE);
 		// to.setOnAction(secondDatePickedEvent);
 
 		// Minor changes made to add padding
@@ -307,7 +343,7 @@ public class Main extends Application {
 		thirdGP.add(box, 0, 0);
 
 		VBox top = new VBox(topGP, secondGP);
-		top.setSpacing(20);
+		top.setSpacing(10);
 		root.setTop(top);
 
 		// Part: Adding an Exit button bottom panel
@@ -320,15 +356,92 @@ public class Main extends Application {
 		VBox bottom = new VBox(thirdGP, btn);
 		bottom.setSpacing(20);
 		root.setBottom(bottom);
+		///
+	///	root.setStyle("-fx-background-color:#383838");
 
 		primaryStage.setTitle(APP_TITLE);
 		primaryStage.setScene(mainScene);
 		primaryStage.show();
 
 	}
+	
+	
+	private void saveEntry(String countryName, LocalDate date, Label dateLabel, Label confirmedLabel, Label deathsLabel,
+			Label recoveredLabel) {
+		
+		/////
+	    
+		try{
+	    	String content = "\n----- Data Entry-----";
+	    	String contentend = "---------------------\n";
+	        //Specify the file name and path here
+	    	File file = new File("data_output.txt");
+	    	
+	    	// Get country data
+	    				Country selectedCountry = manager.getCountry(countryName);
+	    				DataEntry data = selectedCountry.getEntry(date);
+
+	    				// Formatting to add commas after every 3 digits for readability
+	    				NumberFormat commasIncluded = NumberFormat.getInstance();
+	    				commasIncluded.setGroupingUsed(true);
+
+	    				// Update table to show data on a given day
+	    				String cntry = ("Country: " + countryName);
+	    				String a = ("Date: " + date);
+	    				String b = ("Confirmed: " + commasIncluded.format(data.getActive()));
+	    				String c = ("Deaths: " + commasIncluded.format(data.getDeaths()));
+	    				String d = ("Recovered: " + commasIncluded.format(data.getRecovered()));
+
+	    	/* This logic is to create the file if the
+	    	 * file is not already present
+	    	 */
+	    	if(!file.exists()){
+	    	   file.createNewFile();
+	    	}
+	    	//Here true is to append the content to file
+	    	FileWriter fw = new FileWriter(file,true);
+	    	//BufferedWriter writer give better performance
+	    	BufferedWriter bw = new BufferedWriter(fw);
+	    	bw.write(content);
+	    	bw.newLine();
+	    	bw.newLine();
+	    	bw.write(cntry);
+	    	bw.newLine();
+	    	bw.write(a);
+	    	bw.newLine();
+	    	bw.write(b);
+	    	bw.newLine();
+	    	bw.write(c);
+	    	bw.newLine();
+	    	bw.write(d);
+	    	bw.newLine();
+	    	bw.write(contentend);
+	    	
+	    	//Closing BufferedWriter Stream
+	    	bw.close();
+
+		System.out.println("Data successfully appended at the end of file");
+
+	       } catch(IOException ioe){
+	         System.out.println("Exception occurred:");
+	    	 ioe.printStackTrace();
+	    	 
+	       } catch (CountryNotFoundException e1) {
+				Alert noCountryAlert = new Alert(AlertType.ERROR, "Please select a country before selecting a date.");
+				noCountryAlert.showAndWait();
+				
+		   } catch (DateNotFoundException e2) {
+				Alert dataNotFound = new Alert(AlertType.ERROR,
+						"We could not find any data for this day: " + date + ", please select another");
+				dataNotFound.showAndWait();
+			}
+	   }
+		
+		
+	
 
 	/**
-	 * Creates screeenshot functionality Saves .png file to working directory
+	 * Creates screenshot functionality Saves .png file to working directory
 	 * 
 	 * @param scene
 	 */
