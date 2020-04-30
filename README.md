@@ -22,4 +22,4 @@ Other notes or comments to the grader:
 - To export data from the previous step to a txt file, click the "export table data" button.
 ---
 
-We also have a screenshot function, that creates a file named, "snapshot.png" that is a screenshot of whatever the program is currently showing. At this time, this function does not work when running the program from the `executable.jar`, but it does work when running the program from an Eclipse project.
+We also have a screenshot function, that creates a file named, "snapshot.png" that is a screenshot of whatever the program is currently showing. At this time, this function does not work when running the program from the `executable.jar`, but it does work when running the program from an Eclipse project. This is not our main data output functionality, this is the txt file previously mentioned; the screenshot feature is just an additional thing we did for fun.
