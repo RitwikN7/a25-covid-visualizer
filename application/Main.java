@@ -1,39 +1,55 @@
+/**
+ * Main.java launcher for Covid 19 Visualizer
+ * Utilizes parsed data from backend classes in data_parsing package 
+ * 
+ * Author:   Kritarth Vyas 
+ * Date:     4/20/20
+ *
+ * Course:   CS400
+ * Semester: Spring 2020
+ * Lecture:  001
+ *
+ * IDE:      Eclipse IDE for Java Developers
+ * Version:  2019-12 (4.14.0)
+ * Build id: 20191212-1212
+ * 
+ * List Collaborators: Roshan Verma, Tim Bostanche, Drew Halverson, Ritwik Prasad
+ *
+ * Other Credits: None
+ *
+ * Known Bugs: Screenshot functionality does not work when running from jar file, only when running from a project in eclipse
+ * 	This is due to the program being unable to determine a class path unless there is a project directory
+ * 
+ * Clicking on the first date + select range button throws a null pointer exception, however does not cause any detriment to the program
+ * 
+ */
+
 package application;
 
 import java.time.LocalDate;
+
 import java.util.*;
-import java.util.Map.Entry;
-
-
-// Unnecessary imports because this is not the final version of the application yet.
-// This version is meant for Milestone 2 submission.
 
 import java.io.File;
-import com.sun.javafx.css.StyleManager;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.StackPane;
-import javax.imageio.ImageIO;
-import com.sun.prism.paint.Color;
 import javafx.scene.control.CheckBox;
 
-import data_parsing.Country;
-import data_parsing.CountryManager;
-import data_parsing.CountryNotFoundException;
-import data_parsing.DataEntry;
-import data_parsing.DateNotFoundException;
+import data_parsing.*;
+
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -44,12 +60,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.geometry.Insets;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -61,8 +71,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private List<String> args;
-	private static final int WINDOW_WIDTH = 940;
-	private static final int WINDOW_HEIGHT = 700;
+	private static final int WINDOW_WIDTH = 1380;
+	private static final int WINDOW_HEIGHT = 800;
 	private CountryManager manager = new CountryManager("timeseries.json");
 	boolean secondDatePicked = false;
 
@@ -71,10 +81,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-
 		BorderPane root = new BorderPane();
 		Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
 
 		// FIrst Grid Pane
 		GridPane topGP = new GridPane();
@@ -101,7 +109,6 @@ public class Main extends Application {
 		box.getChildren().add(two);
 		box.getChildren().add(to);
 
-
 		// Menu section
 		HBox menuHB = new HBox();
 		ArrayList<String> mainMenu = new ArrayList<String>();
@@ -122,24 +129,21 @@ public class Main extends Application {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("About");
 					alert.setHeaderText("About");
-					String s =	"This program is a COVID-19 data visualizer with an emphasis on how " +
-							"the statistics concerning this global pandemic for a particular country " +
-							"have changed over time. Users can use this tool of " +
-							"analysis to know daily change in the number of total confirmed cases, total " +
-							"deaths and total recovered for a particular country affected by " +
-							"COVID-19. Graphical visualisations and tabular data available for the same.\n\n"+
-							"Click on 'Take ScreenShot' to save the screenshot of the data displayed on screen.";
+					String s = "This program is a COVID-19 data visualizer with an emphasis on how "
+							+ "the statistics concerning this global pandemic for a particular country "
+							+ "have changed over time. Users can use this tool of "
+							+ "analysis to know daily change in the number of total confirmed cases, total "
+							+ "deaths and total recovered for a particular country affected by "
+							+ "COVID-19. Graphical visualisations and tabular data available for the same.\n\n"
+							+ "Click on 'Take ScreenShot' to save the screenshot of the data displayed on screen.";
 					alert.setContentText(s);
 					alert.show();
-				}
-				else if (optionSelected == "Sources")
-				{
-
+				} else if (optionSelected == "Sources") {
 
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Sources");
 					alert.setHeaderText("Sources");
-					String s ="COVID-19 data Source: https://pomber.github.io/covid19/timeseries.json\n" ;
+					String s = "COVID-19 data Source: https://pomber.github.io/covid19/timeseries.json\n";
 					alert.setContentText(s);
 					alert.show();
 				}
@@ -147,7 +151,6 @@ public class Main extends Application {
 		};
 
 		cbMenu.setOnAction(event3);
-
 
 		// main Label
 		HBox labelHB = new HBox();
@@ -174,7 +177,6 @@ public class Main extends Application {
 		topGP.add(labelHB, 1, 0);
 		topGP.add(scnHB, 2, 0);
 
-
 		// Second Grid Pane
 		GridPane secondGP = new GridPane();
 
@@ -190,7 +192,6 @@ public class Main extends Application {
 		VBox statTableVB = new VBox();
 
 		DatePicker datePicker = new DatePicker();
-
 
 		// label to show the date
 		Label dateLabel = new Label("Date: no date selected");
@@ -227,23 +228,21 @@ public class Main extends Application {
 		EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 
-
 				// get the date picker value
 				String countryThatWasPicked = ctMenu.getValue();
 
-				if(secondDatePicked) {
-					System.out.println("2 dates picked");
-					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
+				if (secondDatePicked) {
+					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(), to.getValue()));
 
-				}
-				else {
-					root.setCenter(drawGraph(countryThatWasPicked,null,null));
+				} else {
+					root.setCenter(drawGraph(countryThatWasPicked, null, null));
 
 				}
 
 				// if there is a date selected, the table information is updated.
 				if (!(datePicker.getValue() == null)) {
-					fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel, recoveredLabel);
+					fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel,
+							recoveredLabel);
 				}
 
 			}
@@ -252,31 +251,26 @@ public class Main extends Application {
 
 		// action event to fill table
 		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
-
 			public void handle(ActionEvent e) {
-
-				fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel, recoveredLabel);
+				fillTable(ctMenu.getValue(), datePicker.getValue(), dateLabel, confirmedLabel, deathsLabel,
+						recoveredLabel);
 			}
 		};
-
 
 		// action event for when 2 dates are picked
 		EventHandler<ActionEvent> rangeCBEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 
-				if (rangeCB.isSelected())
-				{
+				if (rangeCB.isSelected()) {
 					secondDatePicked = true;
 					String countryThatWasPicked = ctMenu.getValue();
 
-					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
+					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(), to.getValue()));
 
-				}
-				else 
-				{
+				} else {
 					secondDatePicked = false;
 					String countryThatWasPicked = ctMenu.getValue();
-					root.setCenter(drawGraph(countryThatWasPicked,null,null));
+					root.setCenter(drawGraph(countryThatWasPicked, null, null));
 				}
 			}
 		};
@@ -296,7 +290,6 @@ public class Main extends Application {
 		statTableVB.getChildren().add(deathsLabel);
 		statTableVB.getChildren().add(recoveredLabel);
 
-
 		dateHB.getChildren().add(datePicker);
 
 		datePicker.setPromptText("---Select Date---");
@@ -306,7 +299,7 @@ public class Main extends Application {
 		secondGP.add(statTableVB, 2, 0);
 		// secondGP.add(datePicker2, 3, 0);
 
-		secondGP.setHgap(50); 
+		secondGP.setHgap(50);
 		secondGP.setVgap(50);
 
 		// adding to third gp
@@ -316,7 +309,6 @@ public class Main extends Application {
 		VBox top = new VBox(topGP, secondGP);
 		top.setSpacing(20);
 		root.setTop(top);
-		
 
 		// Part: Adding an Exit button bottom panel
 		Button btn = new Button("Close Application");
@@ -336,13 +328,12 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Creates screeenshot functionality
-	 * Saves .png file to working directory
+	 * Creates screeenshot functionality Saves .png file to working directory
+	 * 
 	 * @param scene
 	 */
 	private void takeSnapShot(Scene scene) {
-		WritableImage writableImage =
-				new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
+		WritableImage writableImage = new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
 		scene.snapshot(writableImage);
 
 		File file = new File("snapshot.png");
@@ -356,14 +347,16 @@ public class Main extends Application {
 
 	/**
 	 * Fills table with the data from a given day within a given country
-	 * @param countryName     | Country to select data from
-	 * @param date            | Date to find data for
-	 * @param dateLabel       | Labels to update
-	 * @param confirmedLabel           |||
-	 * @param deathsLabel              |||
-	 * @param recoveredLabel           VVV
+	 * 
+	 * @param countryName    | Country to select data from
+	 * @param date           | Date to find data for
+	 * @param dateLabel      | Labels to update
+	 * @param confirmedLabel |||
+	 * @param deathsLabel    |||
+	 * @param recoveredLabel VVV
 	 */
-	private void fillTable(String countryName, LocalDate date, Label dateLabel, Label confirmedLabel, Label deathsLabel, Label recoveredLabel) {
+	private void fillTable(String countryName, LocalDate date, Label dateLabel, Label confirmedLabel, Label deathsLabel,
+			Label recoveredLabel) {
 		try {
 			// Get country data
 			Country selectedCountry = manager.getCountry(countryName);
@@ -379,27 +372,25 @@ public class Main extends Application {
 			deathsLabel.setText("Deaths: " + commasIncluded.format(data.getDeaths()));
 			recoveredLabel.setText("Recovered: " + commasIncluded.format(data.getRecovered()));
 		} catch (CountryNotFoundException e1) {
-			Alert noCountryAlert =
-					new Alert(AlertType.ERROR, "Please select a country before selecting a date.");
+			Alert noCountryAlert = new Alert(AlertType.ERROR, "Please select a country before selecting a date.");
 			noCountryAlert.showAndWait();
 		} catch (DateNotFoundException e2) {
 			Alert dataNotFound = new Alert(AlertType.ERROR,
-					"We could not find any data for this day: "+ date + ", please select another");
+					"We could not find any data for this day: " + date + ", please select another");
 			dataNotFound.showAndWait();
 		}
 	}
 
 	/**
-	 * Draws the graph
-	 * If date range given, draw that new graph
+	 * Draws the graph If date range given, draw that new graph
+	 * 
 	 * @param countryThatWasPicked
 	 * @param start
 	 * @param end
 	 * @return
 	 */
-	private LineChart drawGraph(String countryThatWasPicked,LocalDate start, LocalDate end) {
-		
-		
+	private LineChart drawGraph(String countryThatWasPicked, LocalDate start, LocalDate end) {
+
 		ObservableList<String> ob = FXCollections.observableArrayList();
 
 		CategoryAxis xAxis = new CategoryAxis();
@@ -415,32 +406,30 @@ public class Main extends Application {
 		XYChart.Series<String, Number> dataDeaths = new XYChart.Series<String, Number>();
 		XYChart.Series<String, Number> dataRecovered = new XYChart.Series<String, Number>();
 
-
-		if(start == null && end == null) {
+		if (start == null && end == null) {
 			try {
 				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
-				HashMap<LocalDate,DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
+				HashMap<LocalDate, DataEntry> returnedCountryData = countryToGetDataFrom.getAllEntries();
 
 				List<LocalDate> dates = countryToGetDataFrom.getAllDates();
 
-				for(LocalDate inOrderDate : dates) {
+				for (LocalDate inOrderDate : dates) {
 					DataEntry data = returnedCountryData.get(inOrderDate);
-					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
-					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
-					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getActive()));
+					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getDeaths()));
+					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getRecovered()));
 				}
+
 			} catch (CountryNotFoundException e) {
 				// TODO Auto-generated catch block
 
-				Alert noCountryAlert =
-						new Alert(AlertType.ERROR, "Please select a different country");
-				noCountryAlert.showAndWait();			
+				Alert noCountryAlert = new Alert(AlertType.ERROR, "Please select a different country");
+				noCountryAlert.showAndWait();
 			}
 
-		}
-		else {
-			if(end.isBefore(start)) {
+		} else {
+			if (end.isBefore(start)) {
 				Alert dataNotFound = new Alert(AlertType.ERROR,
 						"Please make sure your end date is after your start date");
 				dataNotFound.showAndWait();
@@ -448,18 +437,18 @@ public class Main extends Application {
 			try {
 				Country countryToGetDataFrom = manager.getCountry(countryThatWasPicked);
 
-				HashMap<LocalDate,DataEntry> returnedCountryData = manager.getNumActiveForDateRange(countryThatWasPicked, start, end);
+				HashMap<LocalDate, DataEntry> returnedCountryData = manager
+						.getNumActiveForDateRange(countryThatWasPicked, start, end);
 
-				List<LocalDate> dates = countryToGetDataFrom.getAllDatesInRange(start,end);
+				List<LocalDate> dates = countryToGetDataFrom.getAllDatesInRange(start, end);
 
-				for(LocalDate inOrderDate : dates) {
-					DataEntry data = returnedCountryData.get(inOrderDate); 
-					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getActive()));
-					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getDeaths()));
-					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(),data.getRecovered()));
+				for (LocalDate inOrderDate : dates) {
+					DataEntry data = returnedCountryData.get(inOrderDate);
+					dataConfirmed.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getActive()));
+					dataDeaths.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getDeaths()));
+					dataRecovered.getData().add(new XYChart.Data<String, Number>(data.toString(), data.getRecovered()));
 
 				}
-
 
 			} catch (CountryNotFoundException | DateNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -467,14 +456,12 @@ public class Main extends Application {
 				Alert dataNotFound = new Alert(AlertType.ERROR,
 						"We could not find any data for this day, please select another");
 				dataNotFound.showAndWait();
-			}	catch (NullPointerException e) {
+			} catch (NullPointerException e) {
 				Alert dataNotFound = new Alert(AlertType.ERROR,
 						"Please make sure to enter both a start and end date to view data for a certain range");
 				dataNotFound.showAndWait();
-				}
+			}
 		}
-
-
 
 		dataConfirmed.setName("Confirmed");
 		dataDeaths.setName("Deaths");
