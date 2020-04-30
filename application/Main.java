@@ -1,39 +1,32 @@
 package application;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.Map.Entry;
 
+import java.util.*;
 
 // Unnecessary imports because this is not the final version of the application yet.
 // This version is meant for Milestone 2 submission.
 
 import java.io.File;
-import com.sun.javafx.css.StyleManager;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.StackPane;
-import javax.imageio.ImageIO;
-import com.sun.prism.paint.Color;
 import javafx.scene.control.CheckBox;
 
-import data_parsing.Country;
-import data_parsing.CountryManager;
-import data_parsing.CountryNotFoundException;
-import data_parsing.DataEntry;
-import data_parsing.DateNotFoundException;
+import data_parsing.*;
+
 import javafx.scene.control.DatePicker;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -44,12 +37,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.geometry.Insets;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -232,7 +219,6 @@ public class Main extends Application {
 				String countryThatWasPicked = ctMenu.getValue();
 
 				if(secondDatePicked) {
-					System.out.println("2 dates picked");
 					root.setCenter(drawGraph(countryThatWasPicked, from.getValue(),to.getValue()));
 
 				}
