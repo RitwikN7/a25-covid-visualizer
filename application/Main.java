@@ -68,8 +68,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -94,17 +96,30 @@ public class Main extends Application {
 		//
 
 		HBox box = new HBox();
+		box.setPadding(new Insets(10,0,0,0));
 		box.setSpacing(10);
 
-		Label range = new Label("Select range for graph");
-		range.setFont(Font.font("Avenir", FontWeight.BOLD, 18));
-		Label one = new Label("From:");
-		Label two = new Label("To:");
+		Text range = new Text(" Select range for graph                ");
+		range.setFill(Color.web("#91a4b3"));
+		range.setFont(Font.font("Avenir Next", FontWeight.BOLD, 20));
+		
+		Text one = new Text("                    From:");
+		one.setFill(Color.web("#91a4b3"));
+		one.setFont(Font.font("Avenir Next", FontWeight.BOLD, 14));
+		
+		Text two = new Text("To:");
+		two.setFill(Color.web("#91a4b3"));
+		two.setFont(Font.font("Avenir Next", FontWeight.BOLD, 14));
 
 		DatePicker from = new DatePicker();
+		from.setStyle("-fx-background-color:#152642");
 		DatePicker to = new DatePicker();
+		to.setStyle("-fx-background-color:#152642");
 
 		CheckBox rangeCB = new CheckBox();
+		rangeCB.setPadding(new Insets(0,0,0,7));
+		rangeCB.setStyle("-fx-background-color:#152642");
+		
 
 		box.getChildren().add(rangeCB);
 		box.getChildren().add(range);
@@ -133,6 +148,7 @@ public class Main extends Application {
 				if (optionSelected == "About") {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("About");
+					
 					alert.setHeaderText("About");
 					String s = "This program is a COVID-19 data visualizer with an emphasis on how "
 							+ "the statistics concerning this global pandemic for a particular country "
@@ -160,14 +176,15 @@ public class Main extends Application {
 		// main Label
 		HBox labelHB = new HBox();
 		labelHB.setPadding(new Insets(0,0,0,225));
-		Label mainLabel = new Label();
+		Text mainLabel = new Text();
 		mainLabel.setFont(Font.font("Avenir Next", FontWeight.NORMAL, 25));
+		mainLabel.setFill(Color.web("#91a4b3"));
 		mainLabel.setText("     Welcome to aTeam25's COVID-19 Data Visualiser     ");
 		labelHB.getChildren().add(mainLabel);
 
 		// screenshot functionality
 		VBox scnVB = new VBox();
-		scnVB.setPadding(new Insets(0,0,0,200));
+		scnVB.setPadding(new Insets(10,0,10,200));
 		scnVB.setSpacing(5);
 		
 		// screenshot button
@@ -203,8 +220,12 @@ public class Main extends Application {
 		topGP.add(labelHB, 1, 0);
 		topGP.add(scnVB, 2, 0);
 
+		
+		topGP.setStyle("-fx-background-color:#06172b");
 		// Second Grid Pane
 		GridPane secondGP = new GridPane();
+		secondGP.setStyle("-fx-background-color:#06172b");
+		
 
 		// Third Grid Pane
 		GridPane thirdGP = new GridPane();
@@ -214,16 +235,22 @@ public class Main extends Application {
 
 		// Date picker
 		HBox dateHB = new HBox();
-		dateHB.setPadding(new Insets(0,0,0,100));
+		dateHB.setPadding(new Insets(10,0,0,100));
 
 		VBox statTableVB = new VBox();
+		statTableVB.setPadding(new Insets(0,450,0,0));
+		
 
+
+		
 		DatePicker datePicker = new DatePicker();
+		
 
 		// label to show the date
-		Label dateLabel = new Label("Date: no date selected");
+		Label dateLabel = new Label("Date: not selected");
 		//
 		dateLabel.setFont(Font.font("Avenir", FontWeight.SEMI_BOLD, 15));
+	
 
 		Label confirmedLabel = new Label("Confirmed:");
 		//
@@ -239,7 +266,7 @@ public class Main extends Application {
 
 		// Country section
 		HBox countryHB = new HBox();
-		countryHB.setPadding(new Insets(0,0,0,10));
+		countryHB.setPadding(new Insets(10,0,0,10));
 		ArrayList<String> countryMenu = new ArrayList<String>();
 
 		for (String countryName : manager.getAllCountries().keySet()) {
@@ -321,6 +348,7 @@ public class Main extends Application {
 
 		// Minor changes made to add padding
 
+		statTableVB.setStyle("-fx-background-color:#d7e8f7");
 		statTableVB.getChildren().add(dateLabel);
 		statTableVB.getChildren().add(confirmedLabel);
 		statTableVB.getChildren().add(deathsLabel);
@@ -335,7 +363,7 @@ public class Main extends Application {
 		secondGP.add(statTableVB, 2, 0);
 		// secondGP.add(datePicker2, 3, 0);
 
-		secondGP.setHgap(50);
+		secondGP.setHgap(150);
 		secondGP.setVgap(50);
 
 		// adding to third gp
@@ -343,7 +371,7 @@ public class Main extends Application {
 		thirdGP.add(box, 0, 0);
 
 		VBox top = new VBox(topGP, secondGP);
-		top.setSpacing(10);
+		top.setSpacing(0);
 		root.setTop(top);
 
 		// Part: Adding an Exit button bottom panel
@@ -357,7 +385,7 @@ public class Main extends Application {
 		bottom.setSpacing(20);
 		root.setBottom(bottom);
 		///
-	///	root.setStyle("-fx-background-color:#383838");
+		root.getBottom().setStyle("-fx-background-color:#152642");
 
 		primaryStage.setTitle(APP_TITLE);
 		primaryStage.setScene(mainScene);
@@ -507,12 +535,17 @@ public class Main extends Application {
 		ObservableList<String> ob = FXCollections.observableArrayList();
 
 		CategoryAxis xAxis = new CategoryAxis();
+		//xAxis.setStyle("-fx-text-inside-color:#06172b");
 		xAxis.setLabel("Date");
 
 		NumberAxis yAxis = new NumberAxis();
+		//yAxis.setStyle("-fx-text-fill:#06172b");
 		yAxis.setLabel("Total number of cases");
 
+
 		LineChart<String, Number> lc = new LineChart<String, Number>(xAxis, yAxis);
+	    lc.setStyle("-fx-background-color:#e9ebcc");
+		
 		lc.setTitle(countryThatWasPicked);
 
 		XYChart.Series<String, Number> dataConfirmed = new XYChart.Series<String, Number>();
