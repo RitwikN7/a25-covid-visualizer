@@ -35,6 +35,8 @@ public class CountryManager {
 			e2.printStackTrace();
 		} catch (IOException e3) {
 			e3.printStackTrace();
+		} catch (NullPointerException e4) {
+			e4.printStackTrace();
 		}
 	}
 
@@ -88,7 +90,7 @@ public class CountryManager {
 				Long confirmedCases = (Long) currentData.get("confirmed");
 				Long confirmedDeaths = (Long) currentData.get("deaths");
 				Long confirmedRecoveries = (Long) currentData.get("recovered");
-				
+
 				// Converts the date array to a LocalDate object
 				LocalDate localDate = LocalDate.of(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]),
 						Integer.parseInt(dateSplit[2]));
@@ -128,8 +130,10 @@ public class CountryManager {
 	 *                                  associated with a value in the hashmap.
 	 */
 
-	public Country getCountry(String countryName) throws CountryNotFoundException {
-
+	public Country getCountry(String countryName) throws CountryNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		} else {
@@ -137,9 +141,10 @@ public class CountryManager {
 		}
 	}
 
-	public HashMap<String,Country> getAllCountries(){
+	public HashMap<String, Country> getAllCountries() {
 		return countries;
 	}
+
 	/**
 	 * Returns number of deaths for a country on a certain date
 	 * 
@@ -149,12 +154,14 @@ public class CountryManager {
 	 * @throws CountryNotFoundException when Country not found in the hashmap
 	 */
 
-	public int getNumDeathsForCountryOnCertainDate(String countryName, LocalDate date) throws CountryNotFoundException, DateNotFoundException {
-
+	public int getNumDeathsForCountryOnCertainDate(String countryName, LocalDate date)
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
-		}
-		else {
+		} else {
 			return countries.get(countryName).getEntry(date).getDeaths();
 		}
 	}
@@ -166,11 +173,14 @@ public class CountryManager {
 	 * @param date        the date that is being searched for
 	 * @return int number of active cases for this country on this date.
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 
-	public int getNumActiveForCountryOnCertainDate(String countryName, LocalDate date) throws CountryNotFoundException, DateNotFoundException {
-
+	public int getNumActiveForCountryOnCertainDate(String countryName, LocalDate date)
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		} else {
@@ -183,14 +193,16 @@ public class CountryManager {
 	 * 
 	 * @param countryName the string name of the country being searched for
 	 * @param date        the date that is being searched for
-	 * @return intt number of recovered cases for this country on this date
+	 * @return int number of recovered cases for this country on this date
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 
 	public int getNumRecoveredForCountryOnCertainDate(String countryName, LocalDate date)
-			throws CountryNotFoundException, DateNotFoundException {
-
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		} else {
@@ -205,7 +217,10 @@ public class CountryManager {
 	 * @return int number of the total deaths for this country
 	 * @throws CountryNotFoundException when Country not found in the hashmap
 	 */
-	public int getTotalNumDeaths(String countryName) throws CountryNotFoundException {
+	public int getTotalNumDeaths(String countryName) throws CountryNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		}
@@ -216,10 +231,13 @@ public class CountryManager {
 	 * Gets the total number of recovered cases for a country
 	 * 
 	 * @param countryName the string name of the country being searched for
-	 * @returnint number of the total recovered cases for this country
+	 * @return int number of the total recovered cases for this country
 	 * @throws CountryNotFoundException when Country not found in the hashmap
 	 */
-	public int getTotalNumRecovered(String countryName) throws CountryNotFoundException {
+	public int getTotalNumRecovered(String countryName) throws CountryNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		}
@@ -233,7 +251,10 @@ public class CountryManager {
 	 * @return int number of the total active cases for this country
 	 * @throws CountryNotFoundException when Country not found in the hashmap
 	 */
-	public int getTotalNumActive(String countryName) throws CountryNotFoundException {
+	public int getTotalNumActive(String countryName) throws CountryNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!countries.containsKey(countryName)) {
 			throw new CountryNotFoundException();
 		}
@@ -249,15 +270,18 @@ public class CountryManager {
 	 * @return a hashmap with dates and ints; the ints are the number of active
 	 *         cases for that date
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 	public HashMap<LocalDate, DataEntry> getNumActiveForDateRange(String countryName, LocalDate date1, LocalDate date2)
-			throws CountryNotFoundException, DateNotFoundException {
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		HashMap<LocalDate, DataEntry> toReturn = new HashMap<LocalDate, DataEntry>();
 		Country countryToGetStatsFrom = this.getCountry(countryName);
 
 		for (LocalDate start = date1; start.isBefore(date2); start = start.plusDays(1)) {
-			
+
 			toReturn.put(start, countryToGetStatsFrom.getEntry(start));
 		}
 
@@ -274,10 +298,13 @@ public class CountryManager {
 	 * @return a hashmap with dates and ints; the ints are the number of deaths for
 	 *         that date
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 	public HashMap<LocalDate, Integer> getNumDeathsForDateRange(String countryName, LocalDate date1, LocalDate date2)
-			throws CountryNotFoundException, DateNotFoundException {
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		HashMap<LocalDate, Integer> toReturn = new HashMap<LocalDate, Integer>();
 		Country countryToGetStatsFrom = this.getCountry(countryName);
 
@@ -298,10 +325,13 @@ public class CountryManager {
 	 * @return a hashmap with dates and ints; the ints are the number of recovered
 	 *         for that date
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 	public HashMap<LocalDate, Integer> getNumRecoveredForDateRange(String countryName, LocalDate date1, LocalDate date2)
-			throws CountryNotFoundException, DateNotFoundException {
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		HashMap<LocalDate, Integer> toReturn = new HashMap<LocalDate, Integer>();
 		Country countryToGetStatsFrom = this.getCountry(countryName);
 
@@ -323,10 +353,13 @@ public class CountryManager {
 	 * @return a hashmap with dates and ints; the ints are the number of deaths for
 	 *         that date
 	 * @throws CountryNotFoundException when Country not found in the hashmap
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
 	public String toStringForDateRange(String countryName, LocalDate date1, LocalDate date2)
-			throws CountryNotFoundException, DateNotFoundException {
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 
 		String toReturn = "";
 
@@ -341,11 +374,13 @@ public class CountryManager {
 			toReturn += "Total number of deaths: " + this.getNumDeathsForDateRange(countryName, date1, date2) + "\n";
 
 			// add number of active cases:
-			toReturn += "Total Number of active cases: " + this.getNumActiveForDateRange(countryName, date1, date2) + "\n";
+			toReturn += "Total Number of active cases: " + this.getNumActiveForDateRange(countryName, date1, date2)
+					+ "\n";
 
 			// add number of recovered cases
 
-			toReturn += "Total Number of recoveries: " + this.getNumRecoveredForDateRange(countryName, date1, date2) + "\n";
+			toReturn += "Total Number of recoveries: " + this.getNumRecoveredForDateRange(countryName, date1, date2)
+					+ "\n";
 
 		}
 		return toReturn;
@@ -359,9 +394,13 @@ public class CountryManager {
 	 * @return returns a String containing all of the information of the country
 	 *         searched for.
 	 * @throws CountryNotFoundException when Country not found in the hashmap.
-	 * @throws DateNotFoundException 
+	 * @throws DateNotFoundException
 	 */
-	public String toString(String countryName, LocalDate date) throws CountryNotFoundException, DateNotFoundException {
+	public String toString(String countryName, LocalDate date)
+			throws CountryNotFoundException, DateNotFoundException, IllegalArgumentException {
+		if (countryName == null) {
+			throw new IllegalArgumentException();
+		}
 		String toReturn = "";
 
 		if (!countries.containsKey(countryName)) {
