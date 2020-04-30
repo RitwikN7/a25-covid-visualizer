@@ -1,11 +1,34 @@
+/**
+ * Main.java launcher for Covid 19 Visualizer
+ * Utilizes parsed data from backend classes in data_parsing package 
+ * 
+ * Author:   Kritarth Vyas 
+ * Date:     4/20/20
+ *
+ * Course:   CS400
+ * Semester: Spring 2020
+ * Lecture:  001
+ *
+ * IDE:      Eclipse IDE for Java Developers
+ * Version:  2019-12 (4.14.0)
+ * Build id: 20191212-1212
+ * 
+ * List Collaborators: Roshan Verma, Tim Bostanche, Drew Halverson, Ritwik Prasad
+ *
+ * Other Credits: None
+ *
+ * Known Bugs: Screenshot functionality does not work when running from jar file, only when running from a project in eclipse
+ * 	This is due to the program being unable to determine a class path unless there is a project directory
+ * 
+ * Clicking on the first date + select range button throws a null pointer exception, however does not cause any detriment to the program
+ * 
+ */
+
 package application;
 
 import java.time.LocalDate;
 
 import java.util.*;
-
-// Unnecessary imports because this is not the final version of the application yet.
-// This version is meant for Milestone 2 submission.
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +71,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private List<String> args;
-	private static final int WINDOW_WIDTH = 940;
-	private static final int WINDOW_HEIGHT = 700;
+	private static final int WINDOW_WIDTH = 1380;
+	private static final int WINDOW_HEIGHT = 800;
 	private CountryManager manager = new CountryManager("timeseries.json");
 	boolean secondDatePicked = false;
 
