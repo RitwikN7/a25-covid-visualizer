@@ -26,6 +26,9 @@ Other notes or comments to the grader:
 - screenshot_2.png is the what the application looks like after clicking on the top calendar function, displaying all data for a specific date
 - screenshot_3.png is the what the application looks like when choosing 2 dates to view a graph for
 
+- We give some more information in the about menu in the top left corner
+- We credit our source in the sources menu in the top left corner
+
  
 
 We also have a screenshot function, that creates a file named, "snapshot.png" that is a screenshot of whatever the program is currently showing. 
