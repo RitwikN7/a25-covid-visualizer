@@ -1,0 +1,27 @@
+
+----- Data Entry-----
+
+Country: Australia
+Date: 2020-04-17
+Confirmed: 6,522
+Deaths: 66
+Recovered: 3,808
+---------------------
+
+----- Data Entry-----
+
+Country: Bolivia
+Date: 2020-04-01
+Confirmed: 115
+Deaths: 7
+Recovered: 1
+---------------------
+
+----- Data Entry-----
+
+Country: France
+Date: 2020-04-04
+Confirmed: 69,500
+Deaths: 7,574
+Recovered: 15,572
+---------------------
